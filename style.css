@@ -51,7 +51,7 @@ body {
   position: absolute;
   left: 0;
   bottom: 0;
-  width: 760px;
+  width: 100vw;
   height: 16px;
   background: rgba(48, 226, 145, 0.18);
   border-radius: 0 999px 999px 0;
