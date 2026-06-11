@@ -16,7 +16,7 @@ function startLoading() {
   setTimeout(() => {
     adaptivePopup.style.display = "none";
 
-    loadingPage.classList.add("is-active");
+    loadingPage.classList.add("is-running");
     runSafetySlides();
   }, 600);
 }
@@ -29,9 +29,7 @@ function runSafetySlides() {
     }
 
     slides[currentIndex].classList.remove("active");
-
     currentIndex += 1;
-
     slides[currentIndex].classList.add("active");
   }, slideInterval);
 
