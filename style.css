@@ -1,1 +1,129 @@
+* {
+  box-sizing: border-box;
+}
 
+html,
+body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: Pretendard, Arial, sans-serif;
+  background: #ffffff;
+  color: #111111;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+/* 로딩화면 */
+.loading-page {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  width: 100%;
+  height: 100vh;
+  min-height: 980px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+/* 안전수칙 이미지 */
+.safety-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 900ms ease;
+}
+
+.safety-slide.active {
+  opacity: 1;
+}
+
+.safety-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 하단 로딩바 */
+.loading-track {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 760px;
+  height: 16px;
+  background: rgba(48, 226, 145, 0.18);
+  border-radius: 0 999px 999px 0;
+  overflow: visible;
+}
+
+.loading-fill {
+  width: 0%;
+  height: 100%;
+  background: #30E291;
+  border-radius: inherit;
+  animation: loadingFill 9s linear forwards;
+}
+
+.loading-bike {
+  position: absolute;
+  left: 0;
+  bottom: 16px;
+  width: 120px;
+  transform: translateX(-50%);
+  animation: bikeMove 9s linear forwards;
+}
+
+@keyframes loadingFill {
+  from {
+    width: 0%;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes bikeMove {
+  from {
+    left: 0%;
+  }
+
+  to {
+    left: 100%;
+  }
+}
+
+/* 로딩화면 사라질 때 */
+.loading-page.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 800ms ease;
+}
+
+/* 메인화면 임시 */
+.main-page {
+  width: 100%;
+  height: 100vh;
+  min-height: 980px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 120px;
+  background: #e9fff3;
+}
+
+.main-page h1 {
+  margin: 0;
+  font-size: 96px;
+  line-height: 1.05;
+  letter-spacing: -0.06em;
+}
+
+.main-page p {
+  margin: 32px 0 0;
+  font-size: 32px;
+  font-weight: 700;
+  color: #30E291;
+}
