@@ -232,3 +232,125 @@ body {
   font-weight: 700;
   color: var(--main-color);
 }
+
+/* =========================
+   메인화면 스크롤 유도 UI
+========================= */
+
+.scroll-guide {
+  position: fixed;
+  left: 50%;
+  bottom: 56px;
+  z-index: 10;
+  transform: translateX(-50%);
+  width: 180px;
+  height: 150px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 500ms ease, transform 500ms ease;
+}
+
+.scroll-guide.is-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.scroll-guide:not(.is-visible) {
+  transform: translateX(-50%) translateY(12px);
+}
+
+.scroll-guide-dim {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 260px;
+  height: 180px;
+  transform: translate(-50%, -50%);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.28);
+  filter: blur(26px);
+}
+
+.scroll-guide-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.65);
+}
+
+.mouse-icon {
+  position: relative;
+  width: 28px;
+  height: 44px;
+  border: 3px solid #ffffff;
+  border-radius: 999px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
+}
+
+.mouse-wheel {
+  position: absolute;
+  left: 50%;
+  top: 8px;
+  width: 4px;
+  height: 8px;
+  border-radius: 999px;
+  background: #ffffff;
+  transform: translateX(-50%);
+  animation: wheelMove 1.4s ease-in-out infinite;
+}
+
+.scroll-arrow {
+  width: 18px;
+  height: 18px;
+  margin-top: 8px;
+  border-right: 2px solid #ffffff;
+  border-bottom: 2px solid #ffffff;
+  transform: rotate(45deg);
+  animation: arrowMove 1.4s ease-in-out infinite;
+}
+
+.scroll-text {
+  margin: 14px 0 0;
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: #ffffff;
+}
+
+@keyframes wheelMove {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 0);
+  }
+
+  35% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, 12px);
+  }
+}
+
+@keyframes arrowMove {
+  0% {
+    opacity: 0.3;
+    transform: rotate(45deg) translate(0, 0);
+  }
+
+  50% {
+    opacity: 1;
+    transform: rotate(45deg) translate(4px, 4px);
+  }
+
+  100% {
+    opacity: 0.3;
+    transform: rotate(45deg) translate(0, 0);
+  }
+}
