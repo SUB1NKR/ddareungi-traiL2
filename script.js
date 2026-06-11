@@ -1,5 +1,5 @@
-const adaptiveNotice = document.querySelector("#adaptiveNotice");
-const noticeStartButton = document.querySelector("#noticeStartButton");
+const adaptivePopup = document.querySelector("#adaptivePopup");
+const startButton = document.querySelector("#startButton");
 
 const loadingPage = document.querySelector("#loading");
 const slides = document.querySelectorAll(".safety-slide");
@@ -11,10 +11,11 @@ let currentIndex = 0;
 let slideTimer = null;
 
 function startLoading() {
-  adaptiveNotice.classList.add("is-hidden");
+  adaptivePopup.classList.add("is-hidden");
 
   setTimeout(() => {
-    adaptiveNotice.style.display = "none";
+    adaptivePopup.style.display = "none";
+
     loadingPage.classList.add("is-active");
     runSafetySlides();
   }, 600);
@@ -22,14 +23,14 @@ function startLoading() {
 
 function runSafetySlides() {
   slideTimer = setInterval(() => {
-    slides[currentIndex].classList.remove("active");
-
-    currentIndex += 1;
-
-    if (currentIndex >= slides.length) {
+    if (currentIndex >= slides.length - 1) {
       clearInterval(slideTimer);
       return;
     }
+
+    slides[currentIndex].classList.remove("active");
+
+    currentIndex += 1;
 
     slides[currentIndex].classList.add("active");
   }, slideInterval);
@@ -44,4 +45,4 @@ function runSafetySlides() {
   }, totalLoadingTime);
 }
 
-noticeStartButton.addEventListener("click", startLoading);
+startButton.addEventListener("click", startLoading);
