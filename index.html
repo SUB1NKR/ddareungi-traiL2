@@ -4,14 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>자전거로 만나는 서울, 따릉이길</title>
+  <title>따릉이 트레일</title>
 
   <link rel="stylesheet" href="./style.css" />
 </head>
 
 <body>
   <!-- 로딩화면 -->
-  <!-- 처음부터 팝업 뒤에 깔려 있어야 하므로 main보다 위에 둡니다. -->
   <section id="loading" class="loading-page" aria-label="따릉이 트레일 로딩화면">
     <div class="safety-slide active">
       <img src="./assets/safety/safety-01.png" alt="따릉이 안전수칙 1" />
@@ -59,29 +58,28 @@
     </div>
   </section>
 
-<!-- 메인화면 임시 -->
-<main id="main" class="main-page">
-  <h1>
-    서울을 달리는<br />
-    새로운 방법
-  </h1>
-  <p>따릉이 트레일</p>
+  <!-- 메인화면 -->
+  <main id="main" class="main-page">
+    <h1>
+      서울을 달리는<br />
+      새로운 방법
+    </h1>
 
-  <!-- 스크롤 유도 UI -->
-  <div id="scrollGuide" class="scroll-guide is-visible" aria-hidden="true">
-    <div class="scroll-guide-dim"></div>
+    <p>따릉이 트레일</p>
 
-    <div class="scroll-guide-content">
-      <div class="mouse-icon">
-        <span class="mouse-wheel"></span>
+    <!-- 스크롤 유도 UI -->
+    <div id="scrollGuide" class="scroll-guide" aria-hidden="true">
+      <div class="scroll-guide-content">
+        <div class="mouse-icon">
+          <span class="mouse-wheel"></span>
+        </div>
+
+        <div class="scroll-arrow"></div>
+
+        <p class="scroll-text">Scroll</p>
       </div>
-
-      <div class="scroll-arrow"></div>
-
-      <p class="scroll-text">Scroll</p>
     </div>
-  </div>
-</main>
+  </main>
 
   <script src="./script.js"></script>
 </body>
