@@ -59,14 +59,29 @@
     </div>
   </section>
 
-  <!-- 메인화면 임시 -->
-  <main id="main" class="main-page">
-    <h1>
-      서울을 달리는<br />
-      새로운 방법
-    </h1>
-    <p>따릉이 트레일</p>
-  </main>
+<!-- 메인화면 임시 -->
+<main id="main" class="main-page">
+  <h1>
+    서울을 달리는<br />
+    새로운 방법
+  </h1>
+  <p>따릉이 트레일</p>
+
+  <!-- 스크롤 유도 UI -->
+  <div id="scrollGuide" class="scroll-guide is-visible" aria-hidden="true">
+    <div class="scroll-guide-dim"></div>
+
+    <div class="scroll-guide-content">
+      <div class="mouse-icon">
+        <span class="mouse-wheel"></span>
+      </div>
+
+      <div class="scroll-arrow"></div>
+
+      <p class="scroll-text">Scroll</p>
+    </div>
+  </div>
+</main>
 
   <script src="./script.js"></script>
 </body>
