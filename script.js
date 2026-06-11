@@ -4,11 +4,14 @@ const startButton = document.querySelector("#startButton");
 const loadingPage = document.querySelector("#loading");
 const slides = document.querySelectorAll(".safety-slide");
 
+const scrollGuide = document.querySelector("#scrollGuide");
+
 const slideInterval = 3000;
 const totalLoadingTime = slides.length * slideInterval;
 
 let currentIndex = 0;
 let slideTimer = null;
+let scrollGuideTimer = null;
 
 function startLoading() {
   adaptivePopup.classList.add("is-hidden");
@@ -39,8 +42,33 @@ function runSafetySlides() {
     setTimeout(() => {
       loadingPage.style.display = "none";
       document.body.style.overflow = "auto";
+
+      showScrollGuide();
+      startScrollGuideWatch();
     }, 800);
   }, totalLoadingTime);
+}
+
+function showScrollGuide() {
+  if (!scrollGuide) return;
+  scrollGuide.classList.add("is-visible");
+}
+
+function hideScrollGuide() {
+  if (!scrollGuide) return;
+  scrollGuide.classList.remove("is-visible");
+}
+
+function startScrollGuideWatch() {
+  window.addEventListener("scroll", () => {
+    hideScrollGuide();
+
+    clearTimeout(scrollGuideTimer);
+
+    scrollGuideTimer = setTimeout(() => {
+      showScrollGuide();
+    }, 5000);
+  });
 }
 
 startButton.addEventListener("click", startLoading);
