@@ -25,87 +25,6 @@ body {
 }
 
 /* =========================
-   적응형 안내 팝업
-========================= */
-
-.adaptive-popup {
-  position: fixed;
-  inset: 0;
-  z-index: 10000;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.popup-dim {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(6px);
-}
-
-.popup-card {
-  position: relative;
-  z-index: 1;
-  width: 640px;
-  padding: 56px 56px 48px;
-  border-radius: 32px;
-  background: #ffffff;
-  text-align: center;
-  box-shadow: 0 32px 100px rgba(0, 0, 0, 0.2);
-}
-
-.popup-label {
-  margin: 0 0 22px;
-  font-size: 16px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  color: var(--main-color);
-}
-
-.popup-card h1 {
-  margin: 0;
-  font-size: 44px;
-  line-height: 1.18;
-  letter-spacing: -0.06em;
-  color: var(--black);
-}
-
-.popup-description {
-  width: 500px;
-  margin: 24px auto 0;
-  font-size: 19px;
-  line-height: 1.6;
-  letter-spacing: -0.04em;
-  color: #555555;
-}
-
-.popup-button {
-  width: 260px;
-  height: 62px;
-  margin-top: 40px;
-  border: none;
-  border-radius: 999px;
-  background: var(--main-color);
-  color: #ffffff;
-  font-size: 19px;
-  font-weight: 800;
-  cursor: pointer;
-}
-
-.popup-button:hover {
-  filter: brightness(0.96);
-}
-
-.adaptive-popup.is-hidden {
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 600ms ease;
-}
-
-/* =========================
    로딩화면
 ========================= */
 
@@ -113,22 +32,15 @@ body {
   position: fixed;
   left: 0;
   top: 0;
-  z-index: 9999;
+  z-index: 9998;
   width: var(--site-width);
   height: var(--site-height);
   background: #ffffff;
   overflow: hidden;
-
-  opacity: 0;
+  opacity: 1;
   pointer-events: none;
 }
 
-.loading-page.is-active {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-/* 안전수칙 이미지 */
 .safety-slide {
   position: absolute;
   left: 0;
@@ -178,8 +90,8 @@ body {
   animation-play-state: paused;
 }
 
-.loading-page.is-active .loading-fill,
-.loading-page.is-active .loading-bike {
+.loading-page.is-running .loading-fill,
+.loading-page.is-running .loading-bike {
   animation-play-state: running;
 }
 
@@ -210,10 +122,93 @@ body {
 }
 
 /* =========================
+   적응형 안내 팝업
+========================= */
+
+.adaptive-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.popup-dim {
+  position: absolute;
+  inset: 0;
+  background: rgba(84, 102, 91, 0.72);
+  backdrop-filter: blur(8px);
+}
+
+.popup-card {
+  position: relative;
+  z-index: 1;
+  width: 640px;
+  padding: 56px 56px 48px;
+  border-radius: 32px;
+  background: #ffffff;
+  text-align: center;
+  box-shadow: 0 32px 100px rgba(0, 0, 0, 0.18);
+}
+
+.popup-label {
+  margin: 0 0 22px;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--main-color);
+}
+
+.popup-card h1 {
+  margin: 0;
+  font-size: 44px;
+  line-height: 1.18;
+  letter-spacing: -0.06em;
+  color: var(--black);
+}
+
+.popup-description {
+  width: 500px;
+  margin: 24px auto 0;
+  font-size: 19px;
+  line-height: 1.6;
+  letter-spacing: -0.04em;
+  color: #555555;
+}
+
+.popup-button {
+  width: 260px;
+  height: 62px;
+  margin-top: 40px;
+  border: none;
+  border-radius: 999px;
+  background: var(--main-color);
+  color: #ffffff;
+  font-size: 19px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.popup-button:hover {
+  filter: brightness(0.96);
+}
+
+.adaptive-popup.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 600ms ease;
+}
+
+/* =========================
    메인화면 임시
 ========================= */
 
 .main-page {
+  position: relative;
+  z-index: 1;
   width: var(--site-width);
   height: var(--site-height);
   display: flex;
