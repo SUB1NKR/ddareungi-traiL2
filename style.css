@@ -2,12 +2,6 @@
   box-sizing: border-box;
 }
 
-:root {
-  --loading-color: #30E291;
-  --loading-height: 16px;
-  --bike-width: 120px;
-}
-
 html,
 body {
   width: 100%;
@@ -58,25 +52,25 @@ body {
   left: 0;
   bottom: 0;
   width: 100vw;
-  height: var(--loading-height);
+  height: 16px;
   background: rgba(48, 226, 145, 0.18);
-  border-radius: 0;
+  border-radius: 0 999px 999px 0;
   overflow: visible;
 }
 
 .loading-fill {
   width: 0%;
   height: 100%;
-  background: var(--loading-color);
-  border-radius: 0;
+  background: #30E291;
+  border-radius: inherit;
   animation: loadingFill 9s linear forwards;
 }
 
 .loading-bike {
   position: absolute;
   left: 0;
-  bottom: var(--loading-height);
-  width: var(--bike-width);
+  bottom: 16px;
+  width: 120px;
   transform: translateX(-50%);
   animation: bikeMove 9s linear forwards;
 }
@@ -116,67 +110,20 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-left: clamp(32px, 6.25vw, 120px);
+  padding-left: 120px;
   background: #e9fff3;
 }
 
 .main-page h1 {
   margin: 0;
-  font-size: clamp(48px, 5vw, 96px);
+  font-size: 96px;
   line-height: 1.05;
   letter-spacing: -0.06em;
 }
 
 .main-page p {
   margin: 32px 0 0;
-  font-size: clamp(20px, 1.67vw, 32px);
+  font-size: 32px;
   font-weight: 700;
-  color: var(--loading-color);
-}
-
-/* 태블릿 대응 */
-@media (max-width: 1024px) {
-  :root {
-    --loading-height: 12px;
-    --bike-width: 92px;
-  }
-
-  .loading-page {
-    min-height: 100vh;
-  }
-
-  .safety-slide img {
-    object-fit: contain;
-    padding: 40px;
-  }
-}
-
-/* 모바일 대응 */
-@media (max-width: 640px) {
-  :root {
-    --loading-height: 10px;
-    --bike-width: 72px;
-  }
-
-  .loading-page {
-    min-height: 100vh;
-  }
-
-  .safety-slide img {
-    object-fit: contain;
-    padding: 24px;
-  }
-
-  .main-page {
-    padding-left: 24px;
-    padding-right: 24px;
-  }
-
-  .main-page h1 {
-    font-size: 42px;
-  }
-
-  .main-page p {
-    font-size: 20px;
-  }
+  color: #30E291;
 }
