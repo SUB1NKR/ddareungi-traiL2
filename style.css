@@ -203,7 +203,7 @@ body {
 }
 
 /* =========================
-   메인화면 임시
+   메인화면
 ========================= */
 
 .main-page {
@@ -259,18 +259,6 @@ body {
   transform: translateX(-50%) translateY(12px);
 }
 
-.scroll-guide-dim {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 260px;
-  height: 180px;
-  transform: translate(-50%, -50%);
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.28);
-  filter: blur(26px);
-}
-
 .scroll-guide-content {
   position: relative;
   z-index: 1;
@@ -280,7 +268,6 @@ body {
   align-items: center;
   justify-content: center;
   color: #ffffff;
-  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.65);
 }
 
 .mouse-icon {
@@ -289,7 +276,6 @@ body {
   height: 44px;
   border: 3px solid #ffffff;
   border-radius: 999px;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
 }
 
 .mouse-wheel {
