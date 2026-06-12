@@ -29,7 +29,18 @@ function easeInOutCubic(t) {
   return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 }
 
+function setScrollbarWidth() {
+  const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+  document.documentElement.style.setProperty("--scrollbar-width", `${scrollbarWidth}px`);
+}
+
+function resetScrollbarWidth() {
+  document.documentElement.style.setProperty("--scrollbar-width", "0px");
+}
+
 function lockScroll() {
+  setScrollbarWidth();
+
   scrollPosition = window.scrollY;
 
   document.body.style.position = "fixed";
@@ -46,6 +57,7 @@ function unlockScroll() {
   document.body.style.right = "";
   document.body.style.width = "";
 
+  resetScrollbarWidth();
   window.scrollTo(0, scrollPosition);
 }
 
@@ -101,7 +113,7 @@ function finishLoading() {
 
   setTimeout(() => {
     loadingPage.style.display = "none";
-    document.body.style.overflow = "auto";
+    document.body.classList.add("is-page-ready");
 
     showGnb();
     startGnbScrollWatch();
