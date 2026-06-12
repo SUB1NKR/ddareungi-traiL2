@@ -20,6 +20,7 @@ let scrollGuideTimer = null;
 let lastScrollY = 0;
 let isGnbReady = false;
 let isMenuOpen = false;
+let isMenuClosing = false;
 
 function easeInOutCubic(t) {
   return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
@@ -99,7 +100,7 @@ function showGnb() {
 }
 
 function hideGnb() {
-  if (!gnb || !isGnbReady || isMenuOpen) return;
+  if (!gnb || !isGnbReady || isMenuOpen || isMenuClosing) return;
 
   gnb.classList.remove("is-visible");
   gnb.classList.add("is-hidden");
@@ -109,7 +110,7 @@ function startGnbScrollWatch() {
   lastScrollY = window.scrollY;
 
   window.addEventListener("scroll", () => {
-    if (isMenuOpen) return;
+    if (isMenuOpen || isMenuClosing) return;
 
     const currentScrollY = window.scrollY;
 
@@ -126,10 +127,12 @@ function startGnbScrollWatch() {
 }
 
 function openMenu() {
-  if (!menuButton || !menuPanel) return;
+  if (!menuButton || !menuPanel || isMenuClosing) return;
 
   isMenuOpen = true;
+
   document.body.classList.add("is-menu-open");
+  menuPanel.classList.remove("is-closing");
   menuPanel.classList.add("is-open");
   menuButton.classList.add("is-open");
   menuButton.setAttribute("aria-label", "메뉴 닫기");
@@ -139,21 +142,54 @@ function openMenu() {
 }
 
 function closeMenu() {
-  if (!menuButton || !menuPanel) return;
+  if (!menuButton || !menuPanel || !isMenuOpen || isMenuClosing) return;
 
   isMenuOpen = false;
-  document.body.classList.remove("is-menu-open");
+  isMenuClosing = true;
+
+  document.body.classList.add("is-menu-closing");
   menuPanel.classList.remove("is-open");
+  menuPanel.classList.add("is-closing");
+
+  menuPanel.addEventListener("transitionend", finishCloseMenu, { once: true });
+}
+
+function finishCloseMenu(event) {
+  if (event.propertyName !== "transform") return;
+
+  isMenuClosing = false;
+
+  menuPanel.classList.remove("is-closing");
   menuButton.classList.remove("is-open");
   menuButton.setAttribute("aria-label", "메뉴 열기");
+
+  document.body.classList.remove("is-menu-open");
+  document.body.classList.remove("is-menu-closing");
+
+  showGnb();
 }
 
 function toggleMenu() {
-  isMenuOpen ? closeMenu() : openMenu();
+  if (isMenuOpen) {
+    closeMenu();
+  } else {
+    openMenu();
+  }
+}
+
+function moveToHome(event) {
+  event.preventDefault();
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
+  closeMenu();
 }
 
 function showScrollGuide() {
-  if (!scrollGuide || isMenuOpen) return;
+  if (!scrollGuide || isMenuOpen || isMenuClosing) return;
   scrollGuide.classList.add("is-visible");
 }
 
@@ -173,8 +209,6 @@ function startScrollGuideWatch() {
 
 menuButton?.addEventListener("click", toggleMenu);
 
-menuPanel?.querySelectorAll(".menu-link").forEach((link) => {
-  link.addEventListener("click", closeMenu);
-});
+document.querySelector("[data-home-link]")?.addEventListener("click", moveToHome);
 
 startButton?.addEventListener("click", startLoading);
