@@ -46,7 +46,7 @@ body {
   width: 100vw;
   height: 100vh;
   opacity: 0;
-  transition: opacity 900ms ease;
+  transition: opacity 700ms ease;
 }
 
 .safety-slide.active {
@@ -58,6 +58,35 @@ body {
   height: 100%;
   object-fit: contain;
   background: #ffffff;
+}
+
+/* 로딩중 문구 */
+.loading-text {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(44px, 4.2vw, 80px);
+  z-index: 2;
+  margin: 0;
+  transform: translateX(-50%);
+  font-size: clamp(14px, 1vw, 18px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--main-color);
+  animation: loadingTextBlink 1.2s ease-in-out infinite;
+}
+
+@keyframes loadingTextBlink {
+  0% {
+    opacity: 0.35;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.35;
+  }
 }
 
 /* 하단 로딩바 */
@@ -75,7 +104,7 @@ body {
   width: 0%;
   height: 100%;
   background: var(--main-color);
-  animation: loadingFill 9s linear forwards;
+  animation: loadingFill 6s linear forwards;
   animation-play-state: paused;
 }
 
@@ -85,7 +114,7 @@ body {
   bottom: var(--loading-height);
   width: var(--bike-width);
   height: auto;
-  animation: bikeMove 9s linear forwards;
+  animation: bikeMove 6s linear forwards;
   animation-play-state: paused;
 }
 
@@ -146,7 +175,7 @@ body {
 .popup-card {
   position: relative;
   z-index: 1;
-  width: min(640px, 100%);
+  width: min(680px, 100%);
   padding: clamp(36px, 4vw, 56px) clamp(28px, 4vw, 56px) clamp(32px, 3.5vw, 48px);
   border-radius: clamp(24px, 2.5vw, 32px);
   background: #ffffff;
@@ -164,14 +193,14 @@ body {
 
 .popup-card h1 {
   margin: 0;
-  font-size: clamp(30px, 2.8vw, 44px);
+  font-size: clamp(30px, 2.7vw, 44px);
   line-height: 1.18;
   letter-spacing: -0.06em;
   color: var(--black);
 }
 
 .popup-description {
-  width: min(500px, 100%);
+  width: min(520px, 100%);
   margin: 24px auto 0;
   font-size: clamp(15px, 1.2vw, 19px);
   line-height: 1.6;
@@ -276,11 +305,11 @@ body {
 
 .scroll-guide-card {
   position: relative;
-  min-width: clamp(180px, 12.5vw, 240px);
-  padding: clamp(14px, 1.2vw, 20px) clamp(18px, 1.6vw, 28px) clamp(18px, 1.4vw, 24px);
+  min-width: clamp(220px, 15vw, 288px);
+  padding: clamp(20px, 1.4vw, 24px) clamp(20px, 1.8vw, 32px) clamp(18px, 1.4vw, 24px);
   border: 2px solid rgba(48, 226, 145, 0.55);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.94);
   text-align: center;
   box-shadow: 0 12px 36px rgba(48, 226, 145, 0.18);
   animation: scrollCardFloat 2.2s ease-in-out infinite;
@@ -289,22 +318,28 @@ body {
 .scroll-bike-badge {
   position: absolute;
   left: 50%;
-  top: -34px;
-  width: 58px;
-  height: 58px;
+  top: -42px;
+  width: 76px;
+  height: 76px;
   transform: translateX(-50%);
   border-radius: 50%;
   background: var(--main-color);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 30px;
   box-shadow: 0 10px 28px rgba(48, 226, 145, 0.28);
   animation: bikeBadgeBounce 1.6s ease-in-out infinite;
+  overflow: visible;
+}
+
+.scroll-bike-badge img {
+  width: 70px;
+  height: auto;
+  display: block;
 }
 
 .scroll-guide-title {
-  margin: 12px 0 0;
+  margin: 16px 0 0;
   font-size: clamp(15px, 1vw, 18px);
   line-height: 1.2;
   font-weight: 800;
@@ -315,8 +350,9 @@ body {
 .scroll-guide-subtitle {
   margin: 6px 0 0;
   font-size: clamp(12px, 0.8vw, 14px);
-  font-weight: 800;
-  letter-spacing: 0.08em;
+  line-height: 1.35;
+  font-weight: 700;
+  letter-spacing: -0.03em;
   color: var(--main-color);
 }
 
@@ -396,9 +432,16 @@ body {
   }
 
   .scroll-bike-badge {
-    top: -30px;
-    width: 52px;
-    height: 52px;
-    font-size: 26px;
+    top: -36px;
+    width: 64px;
+    height: 64px;
+  }
+
+  .scroll-bike-badge img {
+    width: 58px;
+  }
+
+  .loading-text {
+    bottom: 52px;
   }
 }
