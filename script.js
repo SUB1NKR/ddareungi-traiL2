@@ -10,9 +10,7 @@ const menuButton = document.querySelector("#menuButton");
 const menuPanel = document.querySelector("#menuPanel");
 
 const scrollGuide = document.querySelector("#scrollGuide");
-
-const frameCanvas = document.querySelector("#frameCanvas");
-const frameContext = frameCanvas?.getContext("2d");
+const frameImage = document.querySelector("#frameImage");
 
 const slideInterval = 2000;
 const totalLoadingTime = slides.length * slideInterval;
@@ -32,15 +30,12 @@ let currentIndex = 0;
 let slideTimer = null;
 let scrollGuideTimer = null;
 
-let isGnbReady = false;
 let isPageReady = false;
 let isMenuOpen = false;
 let isMenuClosing = false;
 
-let frameImages = [];
-let currentFrameIndex = 0;
-let lastDrawnFrameIndex = 0;
 let virtualProgress = 0;
+let currentFrameIndex = 0;
 let touchStartY = 0;
 
 function easeInOutCubic(t) {
@@ -61,91 +56,26 @@ function getFrameSrc(index) {
 }
 
 function preloadFrames() {
-  frameImages = Array.from({ length: frameCount }, (_, index) => {
+  for (let index = 0; index < frameCount; index += 1) {
     const image = new Image();
     image.src = getFrameSrc(index);
-    return image;
-  });
-
-  frameImages[0].addEventListener("load", () => {
-    resizeFrameCanvas();
-    drawFrame(0);
-  });
-}
-
-function resizeFrameCanvas() {
-  if (!frameCanvas || !frameContext) return;
-
-  const pixelRatio = window.devicePixelRatio || 1;
-  const width = window.innerWidth;
-  const height = window.innerHeight;
-
-  frameCanvas.width = width * pixelRatio;
-  frameCanvas.height = height * pixelRatio;
-  frameCanvas.style.width = `${width}px`;
-  frameCanvas.style.height = `${height}px`;
-
-  frameContext.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
-
-  drawFrame(lastDrawnFrameIndex);
-}
-
-function drawFrame(index) {
-  if (!frameContext || !frameCanvas) return;
-
-  const image = frameImages[index];
-
-  if (!image || !image.complete || image.naturalWidth === 0) {
-    const fallbackImage = frameImages[lastDrawnFrameIndex];
-
-    if (fallbackImage && fallbackImage.complete && fallbackImage.naturalWidth > 0) {
-      drawImageCover(fallbackImage);
-    }
-
-    return;
   }
-
-  drawImageCover(image);
-  lastDrawnFrameIndex = index;
 }
 
-function drawImageCover(image) {
-  const canvasWidth = window.innerWidth;
-  const canvasHeight = window.innerHeight;
+function setFrame(index) {
+  if (!frameImage) return;
 
-  const imageRatio = image.naturalWidth / image.naturalHeight;
-  const canvasRatio = canvasWidth / canvasHeight;
+  const safeIndex = clamp(index, 0, frameCount - 1);
 
-  let drawWidth;
-  let drawHeight;
-  let drawX;
-  let drawY;
+  if (safeIndex === currentFrameIndex) return;
 
-  if (imageRatio > canvasRatio) {
-    drawHeight = canvasHeight;
-    drawWidth = drawHeight * imageRatio;
-    drawX = (canvasWidth - drawWidth) / 2;
-    drawY = 0;
-  } else {
-    drawWidth = canvasWidth;
-    drawHeight = drawWidth / imageRatio;
-    drawX = 0;
-    drawY = (canvasHeight - drawHeight) / 2;
-  }
-
-  frameContext.clearRect(0, 0, canvasWidth, canvasHeight);
-  frameContext.fillStyle = "#ffffff";
-  frameContext.fillRect(0, 0, canvasWidth, canvasHeight);
-  frameContext.drawImage(image, drawX, drawY, drawWidth, drawHeight);
+  currentFrameIndex = safeIndex;
+  frameImage.src = getFrameSrc(currentFrameIndex);
 }
 
 function updateFrameByProgress() {
   const nextFrameIndex = Math.round(virtualProgress * (frameCount - 1));
-
-  if (nextFrameIndex === currentFrameIndex) return;
-
-  currentFrameIndex = nextFrameIndex;
-  drawFrame(currentFrameIndex);
+  setFrame(nextFrameIndex);
 }
 
 function updateVirtualProgress(delta) {
@@ -166,8 +96,9 @@ function handleWheel(event) {
 function handleKeydown(event) {
   const nextKeys = ["ArrowDown", "PageDown", " "];
   const prevKeys = ["ArrowUp", "PageUp"];
+  const controlKeys = [...nextKeys, ...prevKeys, "Home", "End"];
 
-  if (![...nextKeys, ...prevKeys, "Home", "End"].includes(event.key)) return;
+  if (!controlKeys.includes(event.key)) return;
 
   event.preventDefault();
 
@@ -183,13 +114,16 @@ function handleKeydown(event) {
 
   if (event.key === "Home") {
     virtualProgress = 0;
-    updateFrameByProgress();
+    setFrame(0);
   }
 
   if (event.key === "End") {
     virtualProgress = 1;
-    updateFrameByProgress();
+    setFrame(frameCount - 1);
   }
+
+  hideScrollGuide();
+  restartScrollGuideTimer();
 }
 
 function handleTouchStart(event) {
@@ -210,11 +144,11 @@ function handleTouchMove(event) {
 }
 
 function startFrameSequence() {
-  preloadFrames();
-  resizeFrameCanvas();
-  drawFrame(0);
+  if (!frameImage) return;
 
-  window.addEventListener("resize", resizeFrameCanvas);
+  frameImage.src = getFrameSrc(0);
+  preloadFrames();
+
   window.addEventListener("wheel", handleWheel, { passive: false });
   window.addEventListener("keydown", handleKeydown);
   window.addEventListener("touchstart", handleTouchStart, { passive: false });
@@ -285,7 +219,6 @@ function finishLoading() {
 function showGnb() {
   if (!gnb) return;
 
-  isGnbReady = true;
   gnb.classList.remove("is-hidden");
 
   requestAnimationFrame(() => {
@@ -354,7 +287,7 @@ function moveToHome(event) {
 
   closeMenu(() => {
     virtualProgress = 0;
-    updateFrameByProgress();
+    setFrame(0);
     showScrollGuide();
   });
 }
