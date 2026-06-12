@@ -10,17 +10,11 @@ const menuButton = document.querySelector("#menuButton");
 const menuPanel = document.querySelector("#menuPanel");
 
 const scrollGuide = document.querySelector("#scrollGuide");
-const frameImage = document.querySelector("#frameImage");
+const scrollVideo = document.querySelector("#scrollVideo");
 
 const slideInterval = 2000;
 const totalLoadingTime = slides.length * slideInterval;
 const menuDuration = 780;
-
-const frameCount = 362;
-const frameStartIndex = 0;
-const framePath = "./assets/frames/";
-const framePrefix = "BX사이트";
-const frameExtension = ".webp";
 
 const wheelSensitivity = 0.00012;
 const maxWheelDelta = 0.006;
@@ -34,9 +28,9 @@ let scrollGuideTimer = null;
 let isPageReady = false;
 let isMenuOpen = false;
 let isMenuClosing = false;
+let isVideoReady = false;
 
 let progress = 0;
-let currentFrameIndex = -1;
 let touchStartY = 0;
 
 function easeInOutCubic(t) {
@@ -47,41 +41,23 @@ function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
 }
 
-function shouldBlockFrameControl() {
-  return !isPageReady || isMenuOpen || isMenuClosing;
+function shouldBlockVideoControl() {
+  return !isPageReady || isMenuOpen || isMenuClosing || !isVideoReady;
 }
 
-function getFrameSrc(index) {
-  const frameNumber = String(frameStartIndex + index).padStart(3, "0");
-  return `${framePath}${framePrefix}${frameNumber}${frameExtension}`;
-}
+function setVideoByProgress() {
+  if (!scrollVideo || !isVideoReady) return;
 
-function preloadFrames() {
-  for (let index = 0; index < frameCount; index += 1) {
-    const image = new Image();
-    image.src = getFrameSrc(index);
-  }
-}
+  const duration = scrollVideo.duration;
 
-function setFrame(index) {
-  if (!frameImage) return;
+  if (!duration || Number.isNaN(duration)) return;
 
-  const safeIndex = clamp(index, 0, frameCount - 1);
-
-  if (safeIndex === currentFrameIndex) return;
-
-  currentFrameIndex = safeIndex;
-  frameImage.src = getFrameSrc(currentFrameIndex);
-}
-
-function updateFrame() {
-  const nextFrameIndex = Math.round(progress * (frameCount - 1));
-  setFrame(nextFrameIndex);
+  scrollVideo.currentTime = progress * duration;
 }
 
 function changeProgress(delta) {
   progress = clamp(progress + delta, 0, 1);
-  updateFrame();
+  setVideoByProgress();
 
   hideScrollGuide();
   restartScrollGuideTimer();
@@ -90,7 +66,7 @@ function changeProgress(delta) {
 function handleWheel(event) {
   event.preventDefault();
 
-  if (shouldBlockFrameControl()) return;
+  if (shouldBlockVideoControl()) return;
 
   const rawDelta = event.deltaY * wheelSensitivity;
   const limitedDelta = clamp(rawDelta, -maxWheelDelta, maxWheelDelta);
@@ -107,7 +83,7 @@ function handleKeydown(event) {
 
   event.preventDefault();
 
-  if (shouldBlockFrameControl()) return;
+  if (shouldBlockVideoControl()) return;
 
   if (nextKeys.includes(event.key)) {
     changeProgress(keyStep);
@@ -119,12 +95,12 @@ function handleKeydown(event) {
 
   if (event.key === "Home") {
     progress = 0;
-    updateFrame();
+    setVideoByProgress();
   }
 
   if (event.key === "End") {
     progress = 1;
-    updateFrame();
+    setVideoByProgress();
   }
 
   hideScrollGuide();
@@ -133,13 +109,14 @@ function handleKeydown(event) {
 
 function handleTouchStart(event) {
   if (!event.touches || event.touches.length === 0) return;
+
   touchStartY = event.touches[0].clientY;
 }
 
 function handleTouchMove(event) {
   event.preventDefault();
 
-  if (shouldBlockFrameControl()) return;
+  if (shouldBlockVideoControl()) return;
   if (!event.touches || event.touches.length === 0) return;
 
   const currentY = event.touches[0].clientY;
@@ -150,11 +127,22 @@ function handleTouchMove(event) {
   changeProgress(deltaY * touchSensitivity);
 }
 
-function startFrameSequence() {
-  if (!frameImage) return;
+function prepareScrollVideo() {
+  if (!scrollVideo) return;
 
-  setFrame(0);
-  preloadFrames();
+  scrollVideo.pause();
+  scrollVideo.currentTime = 0;
+
+  scrollVideo.addEventListener("loadedmetadata", () => {
+    isVideoReady = true;
+    scrollVideo.currentTime = 0;
+  });
+
+  scrollVideo.load();
+}
+
+function startVideoScrollControl() {
+  prepareScrollVideo();
 
   window.addEventListener("wheel", handleWheel, { passive: false });
   window.addEventListener("keydown", handleKeydown);
@@ -216,7 +204,7 @@ function finishLoading() {
     loadingPage.style.display = "none";
     isPageReady = true;
 
-    startFrameSequence();
+    startVideoScrollControl();
     showGnb();
     showScrollGuide();
     startScrollGuideWatch();
@@ -294,18 +282,20 @@ function moveToHome(event) {
 
   closeMenu(() => {
     progress = 0;
-    updateFrame();
+    setVideoByProgress();
     showScrollGuide();
   });
 }
 
 function showScrollGuide() {
   if (!scrollGuide || isMenuOpen || isMenuClosing) return;
+
   scrollGuide.classList.add("is-visible");
 }
 
 function hideScrollGuide() {
   if (!scrollGuide) return;
+
   scrollGuide.classList.remove("is-visible");
 }
 
