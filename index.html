@@ -65,31 +65,33 @@
     </div>
   </section>
 
-<!-- 상단 GNB -->
-<header id="gnb" class="site-gnb" aria-label="상단 메뉴">
-  <a href="#" class="gnb-logo" aria-label="따릉이 트레일 홈">
-    <img src="./assets/icons/ddareungi-logo.png" alt="따릉이 트레일" />
-  </a>
+  <!-- 상단 GNB -->
+  <header id="gnb" class="site-gnb" aria-label="상단 메뉴">
+    <a href="#main" class="gnb-logo" aria-label="따릉이 트레일 홈">
+      <img src="./assets/icons/ddareungi-logo.png" alt="따릉이 트레일" />
+    </a>
 
-  <button id="menuButton" class="gnb-menu-button" type="button" aria-label="메뉴 열기">
-    <span></span>
-    <span></span>
-    <span></span>
-  </button>
-</header>
+    <button id="menuButton" class="gnb-menu-button" type="button" aria-label="메뉴 열기">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </header>
 
-<!-- 메뉴 화면 -->
-<section id="menuPanel" class="menu-panel" aria-label="전체 메뉴">
-  <nav class="menu-nav">
-    <a href="#main" class="menu-link">홈</a>
-    <a href="#course" class="menu-link">20코스 안내</a>
-    <a href="#find-course" class="menu-link">나만의 코스 찾기</a>
-  </nav>
+  <!-- 메뉴 화면 -->
+  <section id="menuPanel" class="menu-panel" aria-label="전체 메뉴">
+    <div class="menu-inner">
+      <nav class="menu-nav">
+        <a href="#course" class="menu-link" style="--i: 0">20코스 안내</a>
+        <a href="#main" class="menu-link" style="--i: 1">홈</a>
+        <a href="#find-course" class="menu-link" style="--i: 2">나만의 코스 찾기</a>
+      </nav>
 
-  <p class="menu-copyright">
-    COPYRIGHT ⓒ 2025 1_je0.in_ All RIGHTS RESERVED.
-  </p>
-</section>
+      <p class="menu-copyright">
+        COPYRIGHT ⓒ 2025 1_je0.in_ All RIGHTS RESERVED.
+      </p>
+    </div>
+  </section>
 
   <!-- 메인화면 -->
   <main id="main" class="main-page">
@@ -103,7 +105,6 @@
         <p>따릉이 트레일</p>
       </div>
 
-      <!-- 스크롤 유도 UI -->
       <div id="scrollGuide" class="scroll-guide" aria-hidden="true">
         <div class="scroll-guide-card">
           <p class="scroll-guide-title">스크롤로 여행을 시작해볼까요?</p>
