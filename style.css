@@ -3,11 +3,11 @@
 }
 
 :root {
-  --site-width: 1920px;
-  --site-height: 980px;
   --main-color: #30E291;
   --black: #111111;
   --white: #ffffff;
+  --loading-height: clamp(10px, 0.84vw, 16px);
+  --bike-width: clamp(72px, 6.25vw, 120px);
 }
 
 html,
@@ -30,11 +30,10 @@ body {
 
 .loading-page {
   position: fixed;
-  left: 0;
-  top: 0;
+  inset: 0;
   z-index: 9998;
-  width: var(--site-width);
-  height: var(--site-height);
+  width: 100vw;
+  height: 100vh;
   background: #ffffff;
   overflow: hidden;
   opacity: 1;
@@ -43,10 +42,9 @@ body {
 
 .safety-slide {
   position: absolute;
-  left: 0;
-  top: 0;
-  width: var(--site-width);
-  height: var(--site-height);
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
   opacity: 0;
   transition: opacity 900ms ease;
 }
@@ -58,7 +56,8 @@ body {
 .safety-slide img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  background: #ffffff;
 }
 
 /* 하단 로딩바 */
@@ -66,8 +65,8 @@ body {
   position: absolute;
   left: 0;
   bottom: 0;
-  width: 1920px;
-  height: 16px;
+  width: 100vw;
+  height: var(--loading-height);
   background: rgba(48, 226, 145, 0.18);
   overflow: visible;
 }
@@ -83,9 +82,9 @@ body {
 .loading-bike {
   position: absolute;
   left: 0;
-  bottom: 16px;
-  width: 120px;
-  transform: translateX(-50%);
+  bottom: var(--loading-height);
+  width: var(--bike-width);
+  height: auto;
   animation: bikeMove 9s linear forwards;
   animation-play-state: paused;
 }
@@ -107,11 +106,11 @@ body {
 
 @keyframes bikeMove {
   from {
-    left: 0%;
+    left: 0;
   }
 
   to {
-    left: 100%;
+    left: calc(100vw - var(--bike-width));
   }
 }
 
@@ -122,7 +121,7 @@ body {
 }
 
 /* =========================
-   적응형 안내 팝업
+   반응형 안내 팝업
 ========================= */
 
 .adaptive-popup {
@@ -134,6 +133,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 24px;
 }
 
 .popup-dim {
@@ -146,9 +146,9 @@ body {
 .popup-card {
   position: relative;
   z-index: 1;
-  width: 640px;
-  padding: 56px 56px 48px;
-  border-radius: 32px;
+  width: min(640px, 100%);
+  padding: clamp(36px, 4vw, 56px) clamp(28px, 4vw, 56px) clamp(32px, 3.5vw, 48px);
+  border-radius: clamp(24px, 2.5vw, 32px);
   background: #ffffff;
   text-align: center;
   box-shadow: 0 32px 100px rgba(0, 0, 0, 0.18);
@@ -156,7 +156,7 @@ body {
 
 .popup-label {
   margin: 0 0 22px;
-  font-size: 16px;
+  font-size: clamp(14px, 1vw, 16px);
   font-weight: 800;
   letter-spacing: -0.03em;
   color: var(--main-color);
@@ -164,30 +164,30 @@ body {
 
 .popup-card h1 {
   margin: 0;
-  font-size: 44px;
+  font-size: clamp(30px, 2.8vw, 44px);
   line-height: 1.18;
   letter-spacing: -0.06em;
   color: var(--black);
 }
 
 .popup-description {
-  width: 500px;
+  width: min(500px, 100%);
   margin: 24px auto 0;
-  font-size: 19px;
+  font-size: clamp(15px, 1.2vw, 19px);
   line-height: 1.6;
   letter-spacing: -0.04em;
   color: #555555;
 }
 
 .popup-button {
-  width: 260px;
-  height: 62px;
+  width: min(260px, 100%);
+  height: clamp(54px, 4vw, 62px);
   margin-top: 40px;
   border: none;
   border-radius: 999px;
   background: var(--main-color);
   color: #ffffff;
-  font-size: 19px;
+  font-size: clamp(16px, 1.2vw, 19px);
   font-weight: 800;
   cursor: pointer;
 }
@@ -209,42 +209,61 @@ body {
 .main-page {
   position: relative;
   z-index: 1;
-  width: var(--site-width);
-  height: var(--site-height);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding-left: 120px;
+  width: 100%;
+  min-height: 200vh;
   background: #e9fff3;
 }
 
-.main-page h1 {
+.hero-section {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: clamp(48px, 6.25vw, 120px);
+}
+
+.hero-text h1 {
   margin: 0;
-  font-size: 96px;
+  font-size: clamp(48px, 5vw, 96px);
   line-height: 1.05;
   letter-spacing: -0.06em;
   color: var(--black);
 }
 
-.main-page p {
-  margin: 32px 0 0;
-  font-size: 32px;
+.hero-text p {
+  margin: clamp(20px, 1.67vw, 32px) 0 0;
+  font-size: clamp(22px, 1.67vw, 32px);
   font-weight: 700;
   color: var(--main-color);
 }
 
+.dummy-section {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+}
+
+.dummy-section p {
+  margin: 0;
+  font-size: clamp(24px, 2vw, 40px);
+  font-weight: 800;
+  color: var(--black);
+}
+
 /* =========================
-   메인화면 스크롤 유도 UI
+   귀여운 스크롤 유도 UI
 ========================= */
 
 .scroll-guide {
   position: fixed;
   left: 50%;
-  bottom: 56px;
+  bottom: clamp(28px, 4vw, 56px);
   z-index: 10;
-  transform: translateX(-50%);
-  width: 180px;
-  height: 150px;
+  transform: translateX(-50%) translateY(12px);
   opacity: 0;
   pointer-events: none;
   transition: opacity 500ms ease, transform 500ms ease;
@@ -255,88 +274,131 @@ body {
   transform: translateX(-50%) translateY(0);
 }
 
-.scroll-guide:not(.is-visible) {
-  transform: translateX(-50%) translateY(12px);
-}
-
-.scroll-guide-content {
+.scroll-guide-card {
   position: relative;
-  z-index: 1;
-  display: flex;
-  height: 100%;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: #ffffff;
-}
-
-.mouse-icon {
-  position: relative;
-  width: 28px;
-  height: 44px;
-  border: 3px solid #ffffff;
+  min-width: clamp(180px, 12.5vw, 240px);
+  padding: clamp(14px, 1.2vw, 20px) clamp(18px, 1.6vw, 28px) clamp(18px, 1.4vw, 24px);
+  border: 2px solid rgba(48, 226, 145, 0.55);
   border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  text-align: center;
+  box-shadow: 0 12px 36px rgba(48, 226, 145, 0.18);
+  animation: scrollCardFloat 2.2s ease-in-out infinite;
 }
 
-.mouse-wheel {
+.scroll-bike-badge {
   position: absolute;
   left: 50%;
-  top: 8px;
-  width: 4px;
-  height: 8px;
-  border-radius: 999px;
-  background: #ffffff;
+  top: -34px;
+  width: 58px;
+  height: 58px;
   transform: translateX(-50%);
-  animation: wheelMove 1.4s ease-in-out infinite;
+  border-radius: 50%;
+  background: var(--main-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  box-shadow: 0 10px 28px rgba(48, 226, 145, 0.28);
+  animation: bikeBadgeBounce 1.6s ease-in-out infinite;
 }
 
-.scroll-arrow {
+.scroll-guide-title {
+  margin: 12px 0 0;
+  font-size: clamp(15px, 1vw, 18px);
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: #111111;
+}
+
+.scroll-guide-subtitle {
+  margin: 6px 0 0;
+  font-size: clamp(12px, 0.8vw, 14px);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--main-color);
+}
+
+.scroll-guide-arrow {
+  position: absolute;
+  left: 50%;
+  bottom: -20px;
   width: 18px;
   height: 18px;
-  margin-top: 8px;
-  border-right: 2px solid #ffffff;
-  border-bottom: 2px solid #ffffff;
-  transform: rotate(45deg);
-  animation: arrowMove 1.4s ease-in-out infinite;
+  transform: translateX(-50%) rotate(45deg);
+  border-right: 3px solid var(--main-color);
+  border-bottom: 3px solid var(--main-color);
+  animation: cuteArrowMove 1.2s ease-in-out infinite;
 }
 
-.scroll-text {
-  margin: 14px 0 0;
-  font-size: 20px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  color: #ffffff;
-}
-
-@keyframes wheelMove {
+@keyframes scrollCardFloat {
   0% {
-    opacity: 0;
-    transform: translate(-50%, 0);
+    transform: translateY(0);
   }
 
-  35% {
-    opacity: 1;
+  50% {
+    transform: translateY(-6px);
   }
 
   100% {
-    opacity: 0;
-    transform: translate(-50%, 12px);
+    transform: translateY(0);
   }
 }
 
-@keyframes arrowMove {
+@keyframes bikeBadgeBounce {
   0% {
-    opacity: 0.3;
-    transform: rotate(45deg) translate(0, 0);
+    transform: translateX(-50%) translateY(0) rotate(-3deg);
+  }
+
+  50% {
+    transform: translateX(-50%) translateY(-5px) rotate(3deg);
+  }
+
+  100% {
+    transform: translateX(-50%) translateY(0) rotate(-3deg);
+  }
+}
+
+@keyframes cuteArrowMove {
+  0% {
+    opacity: 0.35;
+    transform: translateX(-50%) translateY(0) rotate(45deg);
   }
 
   50% {
     opacity: 1;
-    transform: rotate(45deg) translate(4px, 4px);
+    transform: translateX(-50%) translateY(6px) rotate(45deg);
   }
 
   100% {
-    opacity: 0.3;
-    transform: rotate(45deg) translate(0, 0);
+    opacity: 0.35;
+    transform: translateX(-50%) translateY(0) rotate(45deg);
+  }
+}
+
+/* =========================
+   작은 화면 보정
+========================= */
+
+@media (max-width: 768px) {
+  .hero-section {
+    align-items: flex-start;
+    padding-top: 120px;
+  }
+
+  .hero-text h1 {
+    font-size: 44px;
+  }
+
+  .hero-text p {
+    font-size: 22px;
+  }
+
+  .scroll-bike-badge {
+    top: -30px;
+    width: 52px;
+    height: 52px;
+    font-size: 26px;
   }
 }
