@@ -35,7 +35,7 @@
     </div>
   </section>
 
-  <!-- 적응형 안내 팝업 -->
+  <!-- 반응형 안내 팝업 -->
   <section id="adaptivePopup" class="adaptive-popup" aria-label="화면 최적화 안내">
     <div class="popup-dim"></div>
 
@@ -43,13 +43,13 @@
       <p class="popup-label">자전거로 만나는 서울, 따릉이길</p>
 
       <h1>
-        1920×980 화면에<br />
-        최적화되어 있습니다
+        이 웹사이트는<br />
+        데스크톱 화면에 최적화되어 있습니다
       </h1>
 
       <p class="popup-description">
-        본 웹사이트는 데스크톱 1920×980 해상도 기준으로 제작되었습니다.
-        더 안정적인 감상을 위해 데스크톱 환경에서 감상해주세요.
+        화면 크기에 따라 자동으로 조정되지만, 더 안정적인 감상을 위해
+        데스크톱 환경에서 이용해주세요.
       </p>
 
       <button id="startButton" class="popup-button" type="button">
@@ -60,25 +60,34 @@
 
   <!-- 메인화면 -->
   <main id="main" class="main-page">
-    <h1>
-      서울을 달리는<br />
-      새로운 방법
-    </h1>
+    <section class="hero-section">
+      <div class="hero-text">
+        <h1>
+          서울을 달리는<br />
+          새로운 방법
+        </h1>
 
-    <p>따릉이 트레일</p>
-
-    <!-- 스크롤 유도 UI -->
-    <div id="scrollGuide" class="scroll-guide" aria-hidden="true">
-      <div class="scroll-guide-content">
-        <div class="mouse-icon">
-          <span class="mouse-wheel"></span>
-        </div>
-
-        <div class="scroll-arrow"></div>
-
-        <p class="scroll-text">Scroll</p>
+        <p>따릉이 트레일</p>
       </div>
-    </div>
+
+      <!-- 귀여운 스크롤 유도 UI -->
+      <div id="scrollGuide" class="scroll-guide" aria-hidden="true">
+        <div class="scroll-guide-card">
+          <div class="scroll-bike-badge">
+            🚲
+          </div>
+
+          <p class="scroll-guide-title">아래로 달려볼까요?</p>
+          <p class="scroll-guide-subtitle">Scroll</p>
+
+          <div class="scroll-guide-arrow"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="dummy-section">
+      <p>다음 섹션 영역입니다.</p>
+    </section>
   </main>
 
   <script src="./script.js"></script>
