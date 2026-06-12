@@ -205,4 +205,6 @@ if (menuPanel) {
   });
 }
 
-startButton.addEventListener("click", startLoading);
+if (startButton) {
+  startButton.addEventListener("click", startLoading);
+}
