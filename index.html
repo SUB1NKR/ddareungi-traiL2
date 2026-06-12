@@ -71,12 +71,25 @@
       <img src="./assets/icons/ddareungi-logo.png" alt="따릉이 트레일" />
     </a>
 
-    <button class="gnb-menu-button" type="button" aria-label="메뉴 열기">
+    <button id="menuButton" class="gnb-menu-button" type="button" aria-label="메뉴 열기">
       <span></span>
       <span></span>
       <span></span>
     </button>
   </header>
+
+  <!-- 메뉴 화면 -->
+  <section id="menuPanel" class="menu-panel" aria-label="전체 메뉴">
+    <nav class="menu-nav">
+      <a href="#main" class="menu-link">홈</a>
+      <a href="#course" class="menu-link">20코스 안내</a>
+      <a href="#find-course" class="menu-link">나만의 코스 찾기</a>
+    </nav>
+
+    <p class="menu-copyright">
+      COPYRIGHT ⓒ 2025 1_je0.in_ All RIGHTS RESERVED.
+    </p>
+  </section>
 
   <!-- 메인화면 -->
   <main id="main" class="main-page">
@@ -101,8 +114,12 @@
       </div>
     </section>
 
-    <section class="dummy-section">
-      <p>다음 섹션 영역입니다.</p>
+    <section id="course" class="dummy-section">
+      <p>20코스 안내 영역입니다.</p>
+    </section>
+
+    <section id="find-course" class="dummy-section second">
+      <p>나만의 코스 찾기 영역입니다.</p>
     </section>
   </main>
 
