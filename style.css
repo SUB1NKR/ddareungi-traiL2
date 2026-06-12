@@ -455,50 +455,40 @@ body.is-menu-closing .gnb-menu-button span {
 }
 
 /* =========================
-   메인화면
+   메인화면 : 고정형 프레임 시퀀스
 ========================= */
 
 .main-page {
   position: relative;
   z-index: 1;
-  min-height: 200vh;
-  background: #d9d9d9;
-}
-
-.hero-section {
-  position: relative;
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  padding: clamp(140px, 10vw, 180px) clamp(48px, 6.25vw, 120px) clamp(48px, 6.25vw, 120px);
+  background: #000000;
 }
 
-.hero-text h1 {
-  margin: 0;
-  font-size: clamp(48px, 5vw, 96px);
-  line-height: 1.05;
-  font-weight: 900;
+.frame-section {
+  position: relative;
+  height: 650vh;
+  background: #000000;
 }
 
-.hero-text p {
-  margin: 32px 0 0;
-  font-size: clamp(22px, 1.67vw, 32px);
-  font-weight: 800;
-  color: var(--main-color);
+.frame-sticky {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: #000000;
+}
+
+.frame-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 .dummy-section {
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   background: #ffffff;
-}
-
-.dummy-section p {
-  margin: 0;
-  font-size: clamp(24px, 2vw, 40px);
-  font-weight: 800;
 }
 
 /* =========================
@@ -640,14 +630,5 @@ body.is-menu-closing .gnb-menu-button span {
     right: 24px;
     bottom: 28px;
     font-size: 11px;
-  }
-
-  .hero-section {
-    align-items: flex-start;
-    padding-top: 120px;
-  }
-
-  .hero-text h1 {
-    font-size: 44px;
   }
 }
