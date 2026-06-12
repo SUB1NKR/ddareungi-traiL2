@@ -22,9 +22,10 @@ const framePath = "./assets/frames/";
 const framePrefix = "BX사이트";
 const frameExtension = ".webp";
 
-const wheelSensitivity = 0.0009;
-const keyStep = 0.03;
-const touchSensitivity = 0.002;
+const wheelSensitivity = 0.00012;
+const maxWheelDelta = 0.006;
+const keyStep = 0.006;
+const touchSensitivity = 0.00035;
 
 let currentSlideIndex = 0;
 let slideTimer = null;
@@ -44,6 +45,10 @@ function easeInOutCubic(t) {
 
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
+}
+
+function shouldBlockFrameControl() {
+  return !isPageReady || isMenuOpen || isMenuClosing;
 }
 
 function getFrameSrc(index) {
@@ -82,16 +87,15 @@ function changeProgress(delta) {
   restartScrollGuideTimer();
 }
 
-function shouldBlockFrameControl() {
-  return !isPageReady || isMenuOpen || isMenuClosing;
-}
-
 function handleWheel(event) {
   event.preventDefault();
 
   if (shouldBlockFrameControl()) return;
 
-  changeProgress(event.deltaY * wheelSensitivity);
+  const rawDelta = event.deltaY * wheelSensitivity;
+  const limitedDelta = clamp(rawDelta, -maxWheelDelta, maxWheelDelta);
+
+  changeProgress(limitedDelta);
 }
 
 function handleKeydown(event) {
@@ -210,7 +214,6 @@ function finishLoading() {
 
   setTimeout(() => {
     loadingPage.style.display = "none";
-
     isPageReady = true;
 
     startFrameSequence();
@@ -283,11 +286,7 @@ function finishCloseMenu(callback) {
 }
 
 function toggleMenu() {
-  if (isMenuOpen) {
-    closeMenu();
-  } else {
-    openMenu();
-  }
+  isMenuOpen ? closeMenu() : openMenu();
 }
 
 function moveToHome(event) {
