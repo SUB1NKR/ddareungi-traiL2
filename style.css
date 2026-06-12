@@ -325,6 +325,35 @@ body {
   }
 }
 
+/* 모바일 보정 */
+@media (max-width: 768px) {
+  .site-gnb {
+    height: 76px;
+    padding: 0 20px;
+  }
+
+  .gnb-logo {
+    width: 160px;
+    height: 36px;
+  }
+
+  .gnb-logo img {
+    width: 160px;
+    height: 36px;
+  }
+
+  .gnb-menu-button {
+    width: 40px;
+    height: 40px;
+    gap: 6px;
+  }
+
+  .gnb-menu-button span {
+    width: 27px;
+    height: 3px;
+  }
+}
+
 /* =========================
    메인화면
 ========================= */
