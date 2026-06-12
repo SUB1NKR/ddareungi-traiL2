@@ -11,6 +11,7 @@
   --loading-height: clamp(10px, 0.84vw, 16px);
   --gnb-height: 100px;
   --menu-duration: 780ms;
+  --scrollbar-width: 0px;
 }
 
 html,
@@ -24,8 +25,17 @@ body {
   scroll-behavior: smooth;
 }
 
+html {
+  overflow-y: scroll;
+}
+
 body {
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+body.is-page-ready {
+  overflow-y: auto;
 }
 
 body.is-menu-open,
@@ -219,7 +229,9 @@ a {
 
 .site-gnb {
   position: fixed;
-  inset: 0 0 auto;
+  top: 0;
+  left: 0;
+  right: var(--scrollbar-width);
   z-index: 9600;
   height: var(--gnb-height);
   padding: 0 36px;
@@ -235,7 +247,8 @@ a {
     opacity 420ms ease,
     transform 680ms cubic-bezier(0.22, 1, 0.36, 1),
     background 240ms ease,
-    box-shadow 240ms ease;
+    box-shadow 240ms ease,
+    right 0ms;
 }
 
 .site-gnb.is-visible {
@@ -614,8 +627,6 @@ body.is-menu-closing .gnb-menu-button span {
 
   .menu-content {
     left: 32px;
-    top: 50%;
-    transform: translateY(-50%);
   }
 
   .menu-nav {
