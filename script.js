@@ -22,11 +22,11 @@ const framePath = "./assets/frames/";
 const framePrefix = "BX사이트";
 const frameExtension = ".webp";
 
-const wheelSensitivity = 0.00065;
-const keyStep = 0.025;
-const touchSensitivity = 0.0016;
+const wheelSensitivity = 0.0009;
+const keyStep = 0.03;
+const touchSensitivity = 0.002;
 
-let currentIndex = 0;
+let currentSlideIndex = 0;
 let slideTimer = null;
 let scrollGuideTimer = null;
 
@@ -34,8 +34,8 @@ let isPageReady = false;
 let isMenuOpen = false;
 let isMenuClosing = false;
 
-let virtualProgress = 0;
-let currentFrameIndex = 0;
+let progress = 0;
+let currentFrameIndex = -1;
 let touchStartY = 0;
 
 function easeInOutCubic(t) {
@@ -44,10 +44,6 @@ function easeInOutCubic(t) {
 
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
-}
-
-function shouldBlockInteraction() {
-  return !isPageReady || isMenuOpen || isMenuClosing;
 }
 
 function getFrameSrc(index) {
@@ -73,24 +69,29 @@ function setFrame(index) {
   frameImage.src = getFrameSrc(currentFrameIndex);
 }
 
-function updateFrameByProgress() {
-  const nextFrameIndex = Math.round(virtualProgress * (frameCount - 1));
+function updateFrame() {
+  const nextFrameIndex = Math.round(progress * (frameCount - 1));
   setFrame(nextFrameIndex);
 }
 
-function updateVirtualProgress(delta) {
-  virtualProgress = clamp(virtualProgress + delta, 0, 1);
-  updateFrameByProgress();
+function changeProgress(delta) {
+  progress = clamp(progress + delta, 0, 1);
+  updateFrame();
+
   hideScrollGuide();
   restartScrollGuideTimer();
+}
+
+function shouldBlockFrameControl() {
+  return !isPageReady || isMenuOpen || isMenuClosing;
 }
 
 function handleWheel(event) {
   event.preventDefault();
 
-  if (shouldBlockInteraction()) return;
+  if (shouldBlockFrameControl()) return;
 
-  updateVirtualProgress(event.deltaY * wheelSensitivity);
+  changeProgress(event.deltaY * wheelSensitivity);
 }
 
 function handleKeydown(event) {
@@ -102,24 +103,24 @@ function handleKeydown(event) {
 
   event.preventDefault();
 
-  if (shouldBlockInteraction()) return;
+  if (shouldBlockFrameControl()) return;
 
   if (nextKeys.includes(event.key)) {
-    updateVirtualProgress(keyStep);
+    changeProgress(keyStep);
   }
 
   if (prevKeys.includes(event.key)) {
-    updateVirtualProgress(-keyStep);
+    changeProgress(-keyStep);
   }
 
   if (event.key === "Home") {
-    virtualProgress = 0;
-    setFrame(0);
+    progress = 0;
+    updateFrame();
   }
 
   if (event.key === "End") {
-    virtualProgress = 1;
-    setFrame(frameCount - 1);
+    progress = 1;
+    updateFrame();
   }
 
   hideScrollGuide();
@@ -127,26 +128,28 @@ function handleKeydown(event) {
 }
 
 function handleTouchStart(event) {
+  if (!event.touches || event.touches.length === 0) return;
   touchStartY = event.touches[0].clientY;
 }
 
 function handleTouchMove(event) {
   event.preventDefault();
 
-  if (shouldBlockInteraction()) return;
+  if (shouldBlockFrameControl()) return;
+  if (!event.touches || event.touches.length === 0) return;
 
   const currentY = event.touches[0].clientY;
   const deltaY = touchStartY - currentY;
 
   touchStartY = currentY;
 
-  updateVirtualProgress(deltaY * touchSensitivity);
+  changeProgress(deltaY * touchSensitivity);
 }
 
 function startFrameSequence() {
   if (!frameImage) return;
 
-  frameImage.src = getFrameSrc(0);
+  setFrame(0);
   preloadFrames();
 
   window.addEventListener("wheel", handleWheel, { passive: false });
@@ -191,14 +194,14 @@ function runLoadingProgress() {
 
 function runSafetySlides() {
   slideTimer = setInterval(() => {
-    if (currentIndex >= slides.length - 1) {
+    if (currentSlideIndex >= slides.length - 1) {
       clearInterval(slideTimer);
       return;
     }
 
-    slides[currentIndex].classList.remove("active");
-    currentIndex += 1;
-    slides[currentIndex].classList.add("active");
+    slides[currentSlideIndex].classList.remove("active");
+    currentSlideIndex += 1;
+    slides[currentSlideIndex].classList.add("active");
   }, slideInterval);
 }
 
@@ -207,6 +210,7 @@ function finishLoading() {
 
   setTimeout(() => {
     loadingPage.style.display = "none";
+
     isPageReady = true;
 
     startFrameSequence();
@@ -279,15 +283,19 @@ function finishCloseMenu(callback) {
 }
 
 function toggleMenu() {
-  isMenuOpen ? closeMenu() : openMenu();
+  if (isMenuOpen) {
+    closeMenu();
+  } else {
+    openMenu();
+  }
 }
 
 function moveToHome(event) {
   event.preventDefault();
 
   closeMenu(() => {
-    virtualProgress = 0;
-    setFrame(0);
+    progress = 0;
+    updateFrame();
     showScrollGuide();
   });
 }
@@ -310,6 +318,11 @@ function restartScrollGuideTimer() {
 function startScrollGuideWatch() {
   restartScrollGuideTimer();
 }
+
+window.addEventListener("wheel", handleWheel, { passive: false });
+window.addEventListener("keydown", handleKeydown);
+window.addEventListener("touchstart", handleTouchStart, { passive: false });
+window.addEventListener("touchmove", handleTouchMove, { passive: false });
 
 menuButton?.addEventListener("click", toggleMenu);
 
