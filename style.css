@@ -159,7 +159,7 @@ a {
 .popup-card {
   position: relative;
   z-index: 1;
-  width: min(680px, 100%);
+  width: min(760px, 100%);
   padding: clamp(36px, 4vw, 56px);
   border-radius: clamp(24px, 2.5vw, 32px);
   background: #ffffff;
@@ -183,7 +183,7 @@ a {
 }
 
 .popup-description {
-  width: min(520px, 100%);
+  width: min(600px, 100%);
   margin: 24px auto 0;
   font-size: clamp(15px, 1.2vw, 19px);
   line-height: 1.6;
