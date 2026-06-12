@@ -5,7 +5,6 @@ const loadingPage = document.querySelector("#loading");
 const slides = document.querySelectorAll(".safety-slide");
 
 const loadingFill = document.querySelector("#loadingFill");
-const loadingText = document.querySelector("#loadingText");
 
 const scrollGuide = document.querySelector("#scrollGuide");
 
@@ -15,8 +14,6 @@ const totalLoadingTime = slides.length * slideInterval;
 let currentIndex = 0;
 let slideTimer = null;
 let scrollGuideTimer = null;
-let loadingDotTimer = null;
-let loadingDotCount = 1;
 
 function easeInOutCubic(t) {
   if (t < 0.5) {
@@ -32,24 +29,9 @@ function startLoading() {
   setTimeout(() => {
     adaptivePopup.style.display = "none";
 
-    runLoadingText();
     runLoadingProgress();
     runSafetySlides();
   }, 600);
-}
-
-function runLoadingText() {
-  loadingText.textContent = "Loading.";
-
-  loadingDotTimer = setInterval(() => {
-    loadingDotCount += 1;
-
-    if (loadingDotCount > 3) {
-      loadingDotCount = 1;
-    }
-
-    loadingText.textContent = `Loading${".".repeat(loadingDotCount)}`;
-  }, 1000);
 }
 
 function runLoadingProgress() {
@@ -66,9 +48,6 @@ function runLoadingProgress() {
       requestAnimationFrame(updateProgress);
     } else {
       loadingFill.style.width = "100%";
-      clearInterval(loadingDotTimer);
-      loadingText.textContent = "Loading...";
-
       finishLoading();
     }
   }
