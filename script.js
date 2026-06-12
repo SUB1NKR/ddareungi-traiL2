@@ -29,6 +29,8 @@ function startLoading() {
   setTimeout(() => {
     adaptivePopup.style.display = "none";
 
+    loadingPage.classList.add("is-running");
+
     runLoadingProgress();
     runSafetySlides();
   }, 600);
