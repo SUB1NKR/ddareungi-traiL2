@@ -376,21 +376,27 @@ body.is-menu-closing .gnb-menu-button span {
   transform: translateY(20px) scale(1);
   transform-origin: left center;
   transition:
-    opacity 520ms ease,
-    transform 720ms cubic-bezier(0.22, 1, 0.36, 1);
+    opacity 420ms ease,
+    transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .menu-panel.is-open .menu-link {
   opacity: 1;
   transform: translateY(0) scale(1);
-  transition-delay: calc(520ms + var(--i) * 100ms);
+  transition-delay: calc(640ms + var(--i) * 80ms);
 }
 
 .menu-panel.is-open .menu-link:hover {
   transform: translateY(0) scale(1.2);
   transition:
-    transform 520ms cubic-bezier(0.34, 1.56, 0.64, 1),
-    opacity 220ms ease;
+    transform 260ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 120ms ease;
+}
+
+.menu-panel.is-open .menu-link:not(:hover) {
+  transition:
+    transform 160ms ease-out,
+    opacity 120ms ease;
 }
 
 .menu-icon-list {
@@ -408,14 +414,14 @@ body.is-menu-closing .gnb-menu-button span {
   opacity: 0;
   transform: translateX(-20px);
   transition:
-    opacity 460ms ease,
-    transform 660ms cubic-bezier(0.22, 1, 0.36, 1);
+    opacity 420ms ease,
+    transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .menu-panel.is-open .menu-sns-link {
   opacity: 1;
   transform: translateX(0);
-  transition-delay: calc(860ms + var(--i) * 90ms);
+  transition-delay: calc(640ms + var(--i) * 80ms);
 }
 
 .menu-sns-link img {
