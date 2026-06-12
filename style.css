@@ -11,7 +11,6 @@
   --loading-height: clamp(10px, 0.84vw, 16px);
   --gnb-height: 100px;
   --menu-duration: 780ms;
-  --scrollbar-width: 0px;
 }
 
 html,
@@ -40,7 +39,6 @@ body.is-page-ready {
 
 body.is-menu-open,
 body.is-menu-closing {
-  overflow: hidden;
   touch-action: none;
 }
 
@@ -231,7 +229,7 @@ a {
   position: fixed;
   top: 0;
   left: 0;
-  right: var(--scrollbar-width);
+  right: 0;
   z-index: 9600;
   height: var(--gnb-height);
   padding: 0 36px;
