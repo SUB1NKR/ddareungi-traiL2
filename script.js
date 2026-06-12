@@ -3,7 +3,6 @@ const startButton = document.querySelector("#startButton");
 
 const loadingPage = document.querySelector("#loading");
 const slides = document.querySelectorAll(".safety-slide");
-
 const loadingFill = document.querySelector("#loadingFill");
 
 const gnb = document.querySelector("#gnb");
@@ -18,17 +17,12 @@ const totalLoadingTime = slides.length * slideInterval;
 let currentIndex = 0;
 let slideTimer = null;
 let scrollGuideTimer = null;
-
 let lastScrollY = 0;
 let isGnbReady = false;
 let isMenuOpen = false;
 
 function easeInOutCubic(t) {
-  if (t < 0.5) {
-    return 4 * t * t * t;
-  }
-
-  return 1 - Math.pow(-2 * t + 2, 3) / 2;
+  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 }
 
 function startLoading() {
@@ -36,7 +30,6 @@ function startLoading() {
 
   setTimeout(() => {
     adaptivePopup.style.display = "none";
-
     loadingPage.classList.add("is-running");
 
     runLoadingProgress();
@@ -48,18 +41,19 @@ function runLoadingProgress() {
   const startTime = performance.now();
 
   function updateProgress(currentTime) {
-    const elapsedTime = currentTime - startTime;
-    const rawProgress = Math.min(elapsedTime / totalLoadingTime, 1);
+    const elapsed = currentTime - startTime;
+    const rawProgress = Math.min(elapsed / totalLoadingTime, 1);
     const easedProgress = easeInOutCubic(rawProgress);
 
     loadingFill.style.width = `${easedProgress * 100}%`;
 
     if (rawProgress < 1) {
       requestAnimationFrame(updateProgress);
-    } else {
-      loadingFill.style.width = "100%";
-      finishLoading();
+      return;
     }
+
+    loadingFill.style.width = "100%";
+    finishLoading();
   }
 
   requestAnimationFrame(updateProgress);
@@ -105,8 +99,7 @@ function showGnb() {
 }
 
 function hideGnb() {
-  if (!gnb || !isGnbReady) return;
-  if (isMenuOpen) return;
+  if (!gnb || !isGnbReady || isMenuOpen) return;
 
   gnb.classList.remove("is-visible");
   gnb.classList.add("is-hidden");
@@ -119,16 +112,13 @@ function startGnbScrollWatch() {
     if (isMenuOpen) return;
 
     const currentScrollY = window.scrollY;
-    const scrollDifference = Math.abs(currentScrollY - lastScrollY);
 
-    if (scrollDifference < 8) return;
+    if (Math.abs(currentScrollY - lastScrollY) < 8) return;
 
-    if (currentScrollY <= 10) {
+    if (currentScrollY <= 10 || currentScrollY < lastScrollY) {
       showGnb();
-    } else if (currentScrollY > lastScrollY) {
-      hideGnb();
     } else {
-      showGnb();
+      hideGnb();
     }
 
     lastScrollY = currentScrollY;
@@ -139,12 +129,10 @@ function openMenu() {
   if (!menuButton || !menuPanel) return;
 
   isMenuOpen = true;
-
+  document.body.classList.add("is-menu-open");
   menuPanel.classList.add("is-open");
   menuButton.classList.add("is-open");
   menuButton.setAttribute("aria-label", "메뉴 닫기");
-
-  document.body.classList.add("is-menu-open");
 
   showGnb();
   hideScrollGuide();
@@ -154,59 +142,39 @@ function closeMenu() {
   if (!menuButton || !menuPanel) return;
 
   isMenuOpen = false;
-
+  document.body.classList.remove("is-menu-open");
   menuPanel.classList.remove("is-open");
   menuButton.classList.remove("is-open");
   menuButton.setAttribute("aria-label", "메뉴 열기");
-
-  document.body.classList.remove("is-menu-open");
 }
 
 function toggleMenu() {
-  if (isMenuOpen) {
-    closeMenu();
-  } else {
-    openMenu();
-  }
+  isMenuOpen ? closeMenu() : openMenu();
 }
 
 function showScrollGuide() {
-  if (!scrollGuide) return;
-  if (isMenuOpen) return;
-
+  if (!scrollGuide || isMenuOpen) return;
   scrollGuide.classList.add("is-visible");
 }
 
 function hideScrollGuide() {
   if (!scrollGuide) return;
-
   scrollGuide.classList.remove("is-visible");
 }
 
 function startScrollGuideWatch() {
   window.addEventListener("scroll", () => {
     hideScrollGuide();
-
     clearTimeout(scrollGuideTimer);
 
-    scrollGuideTimer = setTimeout(() => {
-      showScrollGuide();
-    }, 5000);
+    scrollGuideTimer = setTimeout(showScrollGuide, 5000);
   });
 }
 
-if (menuButton) {
-  menuButton.addEventListener("click", toggleMenu);
-}
+menuButton?.addEventListener("click", toggleMenu);
 
-if (menuPanel) {
-  const menuLinks = menuPanel.querySelectorAll(".menu-link");
+menuPanel?.querySelectorAll(".menu-link").forEach((link) => {
+  link.addEventListener("click", closeMenu);
+});
 
-  menuLinks.forEach((link) => {
-    link.addEventListener("click", closeMenu);
-  });
-}
-
-if (startButton) {
-  startButton.addEventListener("click", startLoading);
-}
+startButton?.addEventListener("click", startLoading);
