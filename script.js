@@ -23,42 +23,45 @@ let lastScrollY = 0;
 let isGnbReady = false;
 let isMenuOpen = false;
 let isMenuClosing = false;
-let scrollPosition = 0;
 
 function easeInOutCubic(t) {
   return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 }
 
-function setScrollbarWidth() {
-  const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-  document.documentElement.style.setProperty("--scrollbar-width", `${scrollbarWidth}px`);
+function preventPageScroll(event) {
+  if (!isMenuOpen && !isMenuClosing) return;
+
+  event.preventDefault();
 }
 
-function resetScrollbarWidth() {
-  document.documentElement.style.setProperty("--scrollbar-width", "0px");
+function preventScrollKey(event) {
+  if (!isMenuOpen && !isMenuClosing) return;
+
+  const scrollKeys = [
+    "ArrowUp",
+    "ArrowDown",
+    "PageUp",
+    "PageDown",
+    "Home",
+    "End",
+    " "
+  ];
+
+  if (scrollKeys.includes(event.key)) {
+    event.preventDefault();
+  }
 }
 
-function lockScroll() {
-  setScrollbarWidth();
-
-  scrollPosition = window.scrollY;
-
-  document.body.style.position = "fixed";
-  document.body.style.top = `-${scrollPosition}px`;
-  document.body.style.left = "0";
-  document.body.style.right = "0";
-  document.body.style.width = "100%";
+function startScrollLock() {
+  window.addEventListener("wheel", preventPageScroll, { passive: false });
+  window.addEventListener("touchmove", preventPageScroll, { passive: false });
+  window.addEventListener("keydown", preventScrollKey);
 }
 
-function unlockScroll() {
-  document.body.style.position = "";
-  document.body.style.top = "";
-  document.body.style.left = "";
-  document.body.style.right = "";
-  document.body.style.width = "";
-
-  resetScrollbarWidth();
-  window.scrollTo(0, scrollPosition);
+function stopScrollLock() {
+  window.removeEventListener("wheel", preventPageScroll);
+  window.removeEventListener("touchmove", preventPageScroll);
+  window.removeEventListener("keydown", preventScrollKey);
 }
 
 function startLoading() {
@@ -167,7 +170,7 @@ function openMenu() {
   isMenuOpen = true;
   isMenuClosing = false;
 
-  lockScroll();
+  startScrollLock();
 
   document.body.classList.add("is-menu-open");
   document.body.classList.remove("is-menu-closing");
@@ -209,7 +212,7 @@ function finishCloseMenu(callback) {
 
   document.body.classList.remove("is-menu-closing");
 
-  unlockScroll();
+  stopScrollLock();
   showGnb();
 
   if (typeof callback === "function") {
