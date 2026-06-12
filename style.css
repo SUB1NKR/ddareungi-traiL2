@@ -78,8 +78,15 @@ body {
 
 .loading-text span {
   display: inline-block;
+  opacity: 0.45;
+  transform: translateY(0);
   animation: loadingLetterWave 1.35s ease-in-out infinite;
   animation-delay: calc(var(--i) * 0.06s);
+  animation-play-state: paused;
+}
+
+.loading-page.is-running .loading-text span {
+  animation-play-state: running;
 }
 
 @keyframes loadingLetterWave {
