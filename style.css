@@ -17,13 +17,7 @@ body {
   width: 100%;
   margin: 0;
   padding: 0;
-  font-family:
-    "SUIT Variable",
-    "SUIT",
-    -apple-system,
-    BlinkMacSystemFont,
-    system-ui,
-    sans-serif;
+  font-family: "SUIT Variable", "SUIT", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   background: #ffffff;
   color: var(--black);
   scroll-behavior: smooth;
@@ -38,10 +32,8 @@ body.is-menu-open {
 }
 
 button,
-a,
-input,
-textarea {
-  font-family: inherit;
+a {
+  font: inherit;
 }
 
 /* =========================
@@ -63,8 +55,6 @@ textarea {
 .safety-slide {
   position: absolute;
   inset: 0;
-  width: 100vw;
-  height: 100vh;
   opacity: 0;
   transition: opacity 700ms ease;
 }
@@ -87,19 +77,15 @@ textarea {
   z-index: 2;
   margin: 0;
   transform: translateX(-50%);
+  display: flex;
   font-size: clamp(18px, 1.4vw, 28px);
   font-weight: 900;
-  letter-spacing: -0.02em;
   color: var(--main-color);
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .loading-text span {
   display: inline-block;
   opacity: 0.45;
-  transform: translateY(0);
   animation: loadingLetterWave 1.35s ease-in-out infinite;
   animation-delay: calc(var(--i) * 0.06s);
   animation-play-state: paused;
@@ -110,7 +96,7 @@ textarea {
 }
 
 @keyframes loadingLetterWave {
-  0% {
+  0%, 100% {
     opacity: 0.45;
     transform: translateY(0);
   }
@@ -122,11 +108,6 @@ textarea {
 
   60% {
     opacity: 0.75;
-    transform: translateY(0);
-  }
-
-  100% {
-    opacity: 0.45;
     transform: translateY(0);
   }
 }
@@ -151,7 +132,6 @@ textarea {
 
 .loading-page.is-hidden {
   opacity: 0;
-  pointer-events: none;
   transition: opacity 800ms ease;
 }
 
@@ -163,8 +143,6 @@ textarea {
   position: fixed;
   inset: 0;
   z-index: 10000;
-  width: 100vw;
-  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -182,7 +160,7 @@ textarea {
   position: relative;
   z-index: 1;
   width: min(680px, 100%);
-  padding: clamp(36px, 4vw, 56px) clamp(28px, 4vw, 56px) clamp(32px, 3.5vw, 48px);
+  padding: clamp(36px, 4vw, 56px);
   border-radius: clamp(24px, 2.5vw, 32px);
   background: #ffffff;
   text-align: center;
@@ -193,7 +171,6 @@ textarea {
   margin: 0 0 22px;
   font-size: clamp(14px, 1vw, 16px);
   font-weight: 800;
-  letter-spacing: -0.03em;
   color: var(--main-color);
 }
 
@@ -202,7 +179,6 @@ textarea {
   font-size: clamp(30px, 2.7vw, 44px);
   line-height: 1.18;
   font-weight: 900;
-  letter-spacing: -0.06em;
   color: var(--black);
 }
 
@@ -212,7 +188,6 @@ textarea {
   font-size: clamp(15px, 1.2vw, 19px);
   line-height: 1.6;
   font-weight: 500;
-  letter-spacing: -0.04em;
   color: #555555;
 }
 
@@ -220,17 +195,13 @@ textarea {
   width: min(260px, 100%);
   height: clamp(54px, 4vw, 62px);
   margin-top: 40px;
-  border: none;
+  border: 0;
   border-radius: 999px;
   background: var(--main-color);
   color: #ffffff;
   font-size: clamp(16px, 1.2vw, 19px);
   font-weight: 800;
   cursor: pointer;
-}
-
-.popup-button:hover {
-  filter: brightness(0.96);
 }
 
 .adaptive-popup.is-hidden {
@@ -245,27 +216,23 @@ textarea {
 
 .site-gnb {
   position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
+  inset: 0 0 auto;
   z-index: 9600;
-  width: 100%;
   height: var(--gnb-height);
   padding: 0 36px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   background: #ffffff;
-  border-radius: 0;
-  box-shadow:
-    0 10px 30px rgba(17, 17, 17, 0.08),
-    0 1px 0 rgba(17, 17, 17, 0.04);
+  box-shadow: 0 10px 30px rgba(17, 17, 17, 0.08);
   opacity: 0;
   transform: translateY(-100%);
   pointer-events: none;
   transition:
     opacity 420ms ease,
-    transform 680ms cubic-bezier(0.22, 1, 0.36, 1);
+    transform 680ms cubic-bezier(0.22, 1, 0.36, 1),
+    background 240ms ease,
+    box-shadow 240ms ease;
 }
 
 .site-gnb.is-visible {
@@ -280,27 +247,35 @@ textarea {
   pointer-events: none;
 }
 
+body.is-menu-open .site-gnb {
+  background: transparent;
+  box-shadow: none;
+}
+
 .gnb-logo {
   width: 200px;
   height: 44px;
   display: block;
-  flex-shrink: 0;
+  transition: opacity 220ms ease;
 }
 
 .gnb-logo img {
-  width: 200px;
-  height: 44px;
+  width: 100%;
+  height: 100%;
   display: block;
   object-fit: contain;
+}
+
+body.is-menu-open .gnb-logo {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .gnb-menu-button {
   width: 44px;
   height: 44px;
   padding: 0;
-  flex-shrink: 0;
-  border: none;
-  border-radius: 0;
+  border: 0;
   background: transparent;
   display: flex;
   flex-direction: column;
@@ -315,10 +290,14 @@ textarea {
   height: 4px;
   border-radius: 999px;
   background: #111111;
-  display: block;
   transition:
-    transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    background 220ms ease,
+    transform 360ms cubic-bezier(0.34, 1.56, 0.64, 1),
     opacity 220ms ease;
+}
+
+body.is-menu-open .gnb-menu-button span {
+  background: #ffffff;
 }
 
 .gnb-menu-button.is-open span:nth-child(1) {
@@ -340,93 +319,106 @@ textarea {
 .menu-panel {
   position: fixed;
   inset: 0;
-  z-index: 9400;
+  z-index: 9500;
   width: 100%;
   height: 100vh;
-  background: #ffffff;
-  overflow: hidden;
-  pointer-events: none;
-  visibility: hidden;
+  background: var(--main-color);
   transform: translateY(-100%);
+  visibility: hidden;
+  pointer-events: none;
+  overflow: hidden;
   transition:
-    transform 880ms cubic-bezier(0.76, 0, 0.24, 1),
-    visibility 0s linear 880ms;
+    transform 780ms cubic-bezier(0.76, 0, 0.24, 1),
+    visibility 0s linear 780ms;
 }
 
 .menu-panel.is-open {
-  pointer-events: auto;
-  visibility: visible;
   transform: translateY(0);
+  visibility: visible;
+  pointer-events: auto;
   transition:
-    transform 880ms cubic-bezier(0.76, 0, 0.24, 1),
+    transform 780ms cubic-bezier(0.76, 0, 0.24, 1),
     visibility 0s;
 }
 
-.menu-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  padding: calc(var(--gnb-height) + 72px) 36px 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .menu-nav {
-  width: 100%;
+  position: absolute;
+  left: 290px;
+  top: 220px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: clamp(20px, 2.8vw, 42px);
+  gap: 50px;
 }
 
 .menu-link {
+  width: fit-content;
   display: block;
-  color: #111111;
+  color: #ffffff;
   text-decoration: none;
-  font-size: clamp(58px, 7.2vw, 138px);
-  line-height: 0.9;
+  font-size: clamp(56px, 5.6vw, 108px);
+  line-height: 1;
   font-weight: 900;
-  letter-spacing: -0.08em;
   opacity: 0;
-  transform: translateY(-84px);
+  transform: translateY(20px);
+  transform-origin: left center;
   transition:
-    opacity 620ms ease,
-    transform 820ms cubic-bezier(0.22, 1, 0.36, 1),
-    color 220ms ease;
-  transition-delay: 0s;
+    opacity 520ms ease,
+    transform 720ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .menu-panel.is-open .menu-link {
   opacity: 1;
   transform: translateY(0);
-  transition-delay: calc(220ms + var(--i) * 100ms);
+  transition-delay: calc(520ms + var(--i) * 100ms);
 }
 
 .menu-link:hover {
-  color: var(--main-color);
+  transform: translateY(0) scale(1.2);
+  transition:
+    transform 520ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 220ms ease;
+}
+
+.menu-icon-list {
+  position: absolute;
+  left: 290px;
+  top: calc(220px + 3em + 100px + 100px + 100px);
+  display: flex;
+  gap: 20px;
+}
+
+.menu-sns-link {
+  width: 44px;
+  height: 44px;
+  display: block;
+  opacity: 0;
+  transform: translateX(-20px);
+  transition:
+    opacity 460ms ease,
+    transform 660ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.menu-panel.is-open .menu-sns-link {
+  opacity: 1;
+  transform: translateX(0);
+  transition-delay: calc(860ms + var(--i) * 90ms);
+}
+
+.menu-sns-link img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
 }
 
 .menu-copyright {
   position: absolute;
-  left: 36px;
-  bottom: 36px;
+  right: 50px;
+  bottom: 50px;
   margin: 0;
+  color: #ffffff;
   font-size: 14px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: rgba(17, 17, 17, 0.42);
-  opacity: 0;
-  transform: translateY(20px);
-  transition:
-    opacity 520ms ease,
-    transform 640ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.menu-panel.is-open .menu-copyright {
-  opacity: 1;
-  transform: translateY(0);
-  transition-delay: 520ms;
+  font-weight: 600;
 }
 
 /* =========================
@@ -436,21 +428,16 @@ textarea {
 .main-page {
   position: relative;
   z-index: 1;
-  width: 100%;
-  min-height: 300vh;
+  min-height: 200vh;
   background: #d9d9d9;
 }
 
 .hero-section {
   position: relative;
-  width: 100%;
   min-height: 100vh;
   display: flex;
   align-items: center;
-  padding:
-    clamp(140px, 10vw, 180px)
-    clamp(48px, 6.25vw, 120px)
-    clamp(48px, 6.25vw, 120px);
+  padding: clamp(140px, 10vw, 180px) clamp(48px, 6.25vw, 120px) clamp(48px, 6.25vw, 120px);
 }
 
 .hero-text h1 {
@@ -458,19 +445,16 @@ textarea {
   font-size: clamp(48px, 5vw, 96px);
   line-height: 1.05;
   font-weight: 900;
-  letter-spacing: -0.06em;
-  color: var(--black);
 }
 
 .hero-text p {
-  margin: clamp(20px, 1.67vw, 32px) 0 0;
+  margin: 32px 0 0;
   font-size: clamp(22px, 1.67vw, 32px);
   font-weight: 800;
   color: var(--main-color);
 }
 
 .dummy-section {
-  width: 100%;
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -478,15 +462,10 @@ textarea {
   background: #ffffff;
 }
 
-.dummy-section.second {
-  background: #f4f4f4;
-}
-
 .dummy-section p {
   margin: 0;
   font-size: clamp(24px, 2vw, 40px);
   font-weight: 800;
-  color: var(--black);
 }
 
 /* =========================
@@ -498,8 +477,8 @@ textarea {
   left: 50%;
   bottom: clamp(28px, 4vw, 56px);
   z-index: 10;
-  transform: translateX(-50%) translateY(12px);
   opacity: 0;
+  transform: translateX(-50%) translateY(12px);
   pointer-events: none;
   transition: opacity 500ms ease, transform 500ms ease;
 }
@@ -511,8 +490,8 @@ textarea {
 
 .scroll-guide-card {
   position: relative;
-  min-width: clamp(220px, 15vw, 288px);
-  padding: clamp(18px, 1.4vw, 24px) clamp(20px, 1.8vw, 32px);
+  min-width: 260px;
+  padding: 20px 28px;
   border: 2px solid rgba(48, 226, 145, 0.55);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.94);
@@ -521,21 +500,20 @@ textarea {
   animation: scrollCardFloat 2.2s ease-in-out infinite;
 }
 
-.scroll-guide-title {
+.scroll-guide-title,
+.scroll-guide-subtitle {
   margin: 0;
-  font-size: clamp(15px, 1vw, 18px);
-  line-height: 1.2;
+}
+
+.scroll-guide-title {
+  font-size: 17px;
   font-weight: 800;
-  letter-spacing: -0.04em;
-  color: #111111;
 }
 
 .scroll-guide-subtitle {
-  margin: 6px 0 0;
-  font-size: clamp(12px, 0.8vw, 14px);
-  line-height: 1.35;
+  margin-top: 6px;
+  font-size: 14px;
   font-weight: 700;
-  letter-spacing: -0.03em;
   color: var(--main-color);
 }
 
@@ -545,28 +523,24 @@ textarea {
   bottom: -20px;
   width: 18px;
   height: 18px;
-  transform: translateX(-50%) rotate(45deg);
   border-right: 3px solid var(--main-color);
   border-bottom: 3px solid var(--main-color);
+  transform: translateX(-50%) rotate(45deg);
   animation: cuteArrowMove 1.2s ease-in-out infinite;
 }
 
 @keyframes scrollCardFloat {
-  0% {
+  0%, 100% {
     transform: translateY(0);
   }
 
   50% {
     transform: translateY(-6px);
   }
-
-  100% {
-    transform: translateY(0);
-  }
 }
 
 @keyframes cuteArrowMove {
-  0% {
+  0%, 100% {
     opacity: 0.35;
     transform: translateX(-50%) translateY(0) rotate(45deg);
   }
@@ -574,11 +548,6 @@ textarea {
   50% {
     opacity: 1;
     transform: translateX(-50%) translateY(6px) rotate(45deg);
-  }
-
-  100% {
-    opacity: 0.35;
-    transform: translateX(-50%) translateY(0) rotate(45deg);
   }
 }
 
@@ -592,7 +561,6 @@ textarea {
   }
 
   .site-gnb {
-    height: var(--gnb-height);
     padding: 0 20px;
   }
 
@@ -601,15 +569,9 @@ textarea {
     height: 36px;
   }
 
-  .gnb-logo img {
-    width: 160px;
-    height: 36px;
-  }
-
   .gnb-menu-button {
     width: 40px;
     height: 40px;
-    gap: 6px;
   }
 
   .gnb-menu-button span {
@@ -625,19 +587,25 @@ textarea {
     transform: translateY(-9px) rotate(-45deg);
   }
 
-  .menu-inner {
-    padding: calc(var(--gnb-height) + 56px) 20px 40px;
+  .menu-nav {
+    left: 32px;
+    top: 160px;
+    gap: 36px;
   }
 
   .menu-link {
     font-size: 48px;
-    letter-spacing: -0.06em;
+  }
+
+  .menu-icon-list {
+    left: 32px;
+    top: 490px;
   }
 
   .menu-copyright {
-    left: 20px;
-    bottom: 24px;
-    font-size: 12px;
+    right: 24px;
+    bottom: 28px;
+    font-size: 11px;
   }
 
   .hero-section {
@@ -647,13 +615,5 @@ textarea {
 
   .hero-text h1 {
     font-size: 44px;
-  }
-
-  .hero-text p {
-    font-size: 22px;
-  }
-
-  .loading-text {
-    bottom: 52px;
   }
 }
