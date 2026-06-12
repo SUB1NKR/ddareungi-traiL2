@@ -23,9 +23,30 @@ let lastScrollY = 0;
 let isGnbReady = false;
 let isMenuOpen = false;
 let isMenuClosing = false;
+let scrollPosition = 0;
 
 function easeInOutCubic(t) {
   return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+}
+
+function lockScroll() {
+  scrollPosition = window.scrollY;
+
+  document.body.style.position = "fixed";
+  document.body.style.top = `-${scrollPosition}px`;
+  document.body.style.left = "0";
+  document.body.style.right = "0";
+  document.body.style.width = "100%";
+}
+
+function unlockScroll() {
+  document.body.style.position = "";
+  document.body.style.top = "";
+  document.body.style.left = "";
+  document.body.style.right = "";
+  document.body.style.width = "";
+
+  window.scrollTo(0, scrollPosition);
 }
 
 function startLoading() {
@@ -134,6 +155,8 @@ function openMenu() {
   isMenuOpen = true;
   isMenuClosing = false;
 
+  lockScroll();
+
   document.body.classList.add("is-menu-open");
   document.body.classList.remove("is-menu-closing");
 
@@ -147,7 +170,7 @@ function openMenu() {
   hideScrollGuide();
 }
 
-function closeMenu() {
+function closeMenu(callback) {
   if (!menuButton || !menuPanel || !isMenuOpen || isMenuClosing) return;
 
   isMenuOpen = false;
@@ -160,11 +183,11 @@ function closeMenu() {
   menuPanel.classList.add("is-closing");
 
   setTimeout(() => {
-    finishCloseMenu();
+    finishCloseMenu(callback);
   }, menuDuration);
 }
 
-function finishCloseMenu() {
+function finishCloseMenu(callback) {
   isMenuClosing = false;
 
   menuPanel.classList.remove("is-closing");
@@ -174,7 +197,12 @@ function finishCloseMenu() {
 
   document.body.classList.remove("is-menu-closing");
 
+  unlockScroll();
   showGnb();
+
+  if (typeof callback === "function") {
+    callback();
+  }
 }
 
 function toggleMenu() {
@@ -188,12 +216,12 @@ function toggleMenu() {
 function moveToHome(event) {
   event.preventDefault();
 
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
+  closeMenu(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
   });
-
-  closeMenu();
 }
 
 function showScrollGuide() {
