@@ -441,7 +441,7 @@ body.is-menu-closing .gnb-menu-button span {
 }
 
 /* =========================
-   메인화면 : 고정형 프레임 시퀀스
+   메인화면 : WEBM 스크롤 재생 방식
 ========================= */
 
 .main-page {
@@ -454,7 +454,7 @@ body.is-menu-closing .gnb-menu-button span {
   overflow: hidden;
 }
 
-.frame-image {
+.scroll-video {
   width: 100vw;
   height: 100vh;
   display: block;
