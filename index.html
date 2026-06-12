@@ -24,16 +24,10 @@
       <img src="./assets/safety/safety-03.png" alt="따릉이 안전수칙 3" />
     </div>
 
-    <p class="loading-text">로딩중입니다...</p>
+    <p id="loadingText" class="loading-text">0%</p>
 
     <div class="loading-track" aria-hidden="true">
-      <div class="loading-fill"></div>
-
-      <img
-        class="loading-bike"
-        src="./assets/icons/bike-loading.png"
-        alt=""
-      />
+      <div id="loadingFill" class="loading-fill"></div>
     </div>
   </section>
 
@@ -72,13 +66,9 @@
         <p>따릉이 트레일</p>
       </div>
 
-      <!-- 귀여운 스크롤 유도 UI -->
+      <!-- 스크롤 유도 UI -->
       <div id="scrollGuide" class="scroll-guide" aria-hidden="true">
         <div class="scroll-guide-card">
-          <div class="scroll-bike-badge">
-            <img src="./assets/icons/bike-loading.png" alt="" />
-          </div>
-
           <p class="scroll-guide-title">스크롤로 여행을 시작해볼까요?</p>
           <p class="scroll-guide-subtitle">아래로 내려 따릉이길을 만나보세요</p>
 
