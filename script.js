@@ -15,6 +15,7 @@ const totalLoadingTime = slides.length * slideInterval;
 let currentIndex = 0;
 let slideTimer = null;
 let scrollGuideTimer = null;
+
 let lastScrollY = 0;
 let isGnbReady = false;
 
@@ -102,6 +103,7 @@ function showGnb() {
 function hideGnb() {
   if (!gnb || !isGnbReady) return;
 
+  gnb.classList.remove("is-visible");
   gnb.classList.add("is-hidden");
 }
 
@@ -128,11 +130,13 @@ function startGnbScrollWatch() {
 
 function showScrollGuide() {
   if (!scrollGuide) return;
+
   scrollGuide.classList.add("is-visible");
 }
 
 function hideScrollGuide() {
   if (!scrollGuide) return;
+
   scrollGuide.classList.remove("is-visible");
 }
 
