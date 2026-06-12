@@ -26,28 +26,16 @@ body {
 }
 
 html {
-  overflow: hidden;
+  overflow-y: scroll;
   scrollbar-gutter: stable;
 }
 
 body {
-  overflow: hidden;
-}
-
-html.is-page-ready {
-  overflow-y: scroll;
-}
-
-body.is-page-ready {
   overflow-x: hidden;
-  overflow-y: auto;
 }
 
-html.is-menu-open,
-html.is-menu-closing,
 body.is-menu-open,
 body.is-menu-closing {
-  overflow: hidden;
   touch-action: none;
 }
 
