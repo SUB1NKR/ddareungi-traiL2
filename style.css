@@ -369,11 +369,11 @@ body.is-menu-closing .gnb-menu-button span {
   display: block;
   color: #ffffff;
   text-decoration: none;
-  font-size: clamp(56px, 5.6vw, 108px);
+  font-size: 80px;
   line-height: 1;
   font-weight: 900;
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(20px) scale(1);
   transform-origin: left center;
   transition:
     opacity 520ms ease,
@@ -382,11 +382,11 @@ body.is-menu-closing .gnb-menu-button span {
 
 .menu-panel.is-open .menu-link {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
   transition-delay: calc(520ms + var(--i) * 100ms);
 }
 
-.menu-link:hover {
+.menu-panel.is-open .menu-link:hover {
   transform: translateY(0) scale(1.2);
   transition:
     transform 520ms cubic-bezier(0.34, 1.56, 0.64, 1),
