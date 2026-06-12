@@ -21,22 +21,32 @@ let scrollGuideTimer = null;
 let lastScrollY = 0;
 
 let isGnbReady = false;
+let isPageReady = false;
 let isMenuOpen = false;
 let isMenuClosing = false;
-let isPageReady = false;
-let scrollPosition = 0;
+
+let lockedScrollY = 0;
+let isRestoringScroll = false;
 
 function easeInOutCubic(t) {
   return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 }
 
+function shouldBlockScroll() {
+  return !isPageReady || isMenuOpen || isMenuClosing;
+}
+
+function saveLockedScrollPosition() {
+  lockedScrollY = window.scrollY;
+}
+
 function preventScroll(event) {
-  if (isPageReady && !isMenuOpen && !isMenuClosing) return;
+  if (!shouldBlockScroll()) return;
   event.preventDefault();
 }
 
 function preventScrollKey(event) {
-  if (isPageReady && !isMenuOpen && !isMenuClosing) return;
+  if (!shouldBlockScroll()) return;
 
   const scrollKeys = [
     "ArrowUp",
@@ -53,47 +63,30 @@ function preventScrollKey(event) {
   }
 }
 
-function startGlobalScrollBlock() {
+function restoreLockedScroll() {
+  if (!shouldBlockScroll()) return;
+  if (isRestoringScroll) return;
+  if (window.scrollY === lockedScrollY) return;
+
+  isRestoringScroll = true;
+
+  window.scrollTo(0, lockedScrollY);
+
+  requestAnimationFrame(() => {
+    isRestoringScroll = false;
+  });
+}
+
+function startScrollBlock() {
   window.addEventListener("wheel", preventScroll, { passive: false });
   window.addEventListener("touchmove", preventScroll, { passive: false });
   window.addEventListener("keydown", preventScrollKey);
-}
-
-function stopGlobalScrollBlock() {
-  window.removeEventListener("wheel", preventScroll);
-  window.removeEventListener("touchmove", preventScroll);
-  window.removeEventListener("keydown", preventScrollKey);
-}
-
-function lockMenuScroll() {
-  scrollPosition = window.scrollY;
-
-  document.documentElement.classList.add("is-menu-open");
-  document.body.classList.add("is-menu-open");
-
-  document.body.style.position = "fixed";
-  document.body.style.top = `-${scrollPosition}px`;
-  document.body.style.left = "0";
-  document.body.style.right = "0";
-  document.body.style.width = "100%";
-}
-
-function unlockMenuScroll() {
-  document.body.style.position = "";
-  document.body.style.top = "";
-  document.body.style.left = "";
-  document.body.style.right = "";
-  document.body.style.width = "";
-
-  document.documentElement.classList.remove("is-menu-open");
-  document.documentElement.classList.remove("is-menu-closing");
-  document.body.classList.remove("is-menu-open");
-  document.body.classList.remove("is-menu-closing");
-
-  window.scrollTo(0, scrollPosition);
+  window.addEventListener("scroll", restoreLockedScroll);
 }
 
 function startLoading() {
+  saveLockedScrollPosition();
+
   adaptivePopup.classList.add("is-hidden");
 
   setTimeout(() => {
@@ -148,9 +141,6 @@ function finishLoading() {
 
     isPageReady = true;
 
-    document.documentElement.classList.add("is-page-ready");
-    document.body.classList.add("is-page-ready");
-
     showGnb();
     startGnbScrollWatch();
 
@@ -203,10 +193,9 @@ function openMenu() {
   isMenuOpen = true;
   isMenuClosing = false;
 
-  lockMenuScroll();
-  startGlobalScrollBlock();
+  saveLockedScrollPosition();
 
-  document.documentElement.classList.remove("is-menu-closing");
+  document.body.classList.add("is-menu-open");
   document.body.classList.remove("is-menu-closing");
 
   menuPanel.classList.remove("is-closing");
@@ -224,9 +213,6 @@ function closeMenu(callback) {
 
   isMenuOpen = false;
   isMenuClosing = true;
-
-  document.documentElement.classList.remove("is-menu-open");
-  document.documentElement.classList.add("is-menu-closing");
 
   document.body.classList.remove("is-menu-open");
   document.body.classList.add("is-menu-closing");
@@ -247,12 +233,10 @@ function finishCloseMenu(callback) {
   menuButton.classList.remove("is-open");
   menuButton.setAttribute("aria-label", "메뉴 열기");
 
-  unlockMenuScroll();
-  showGnb();
+  document.body.classList.remove("is-menu-closing");
 
-  if (isPageReady) {
-    stopGlobalScrollBlock();
-  }
+  window.scrollTo(0, lockedScrollY);
+  showGnb();
 
   if (typeof callback === "function") {
     callback();
@@ -297,7 +281,8 @@ function startScrollGuideWatch() {
   });
 }
 
-startGlobalScrollBlock();
+saveLockedScrollPosition();
+startScrollBlock();
 
 menuButton?.addEventListener("click", toggleMenu);
 
