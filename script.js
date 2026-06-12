@@ -7,6 +7,9 @@ const slides = document.querySelectorAll(".safety-slide");
 const loadingFill = document.querySelector("#loadingFill");
 
 const gnb = document.querySelector("#gnb");
+const menuButton = document.querySelector("#menuButton");
+const menuPanel = document.querySelector("#menuPanel");
+
 const scrollGuide = document.querySelector("#scrollGuide");
 
 const slideInterval = 2000;
@@ -18,6 +21,7 @@ let scrollGuideTimer = null;
 
 let lastScrollY = 0;
 let isGnbReady = false;
+let isMenuOpen = false;
 
 function easeInOutCubic(t) {
   if (t < 0.5) {
@@ -102,6 +106,7 @@ function showGnb() {
 
 function hideGnb() {
   if (!gnb || !isGnbReady) return;
+  if (isMenuOpen) return;
 
   gnb.classList.remove("is-visible");
   gnb.classList.add("is-hidden");
@@ -111,6 +116,8 @@ function startGnbScrollWatch() {
   lastScrollY = window.scrollY;
 
   window.addEventListener("scroll", () => {
+    if (isMenuOpen) return;
+
     const currentScrollY = window.scrollY;
     const scrollDifference = Math.abs(currentScrollY - lastScrollY);
 
@@ -126,6 +133,40 @@ function startGnbScrollWatch() {
 
     lastScrollY = currentScrollY;
   });
+}
+
+function openMenu() {
+  if (!menuButton || !menuPanel) return;
+
+  isMenuOpen = true;
+
+  menuPanel.classList.add("is-open");
+  menuButton.classList.add("is-open");
+  menuButton.setAttribute("aria-label", "메뉴 닫기");
+
+  document.body.classList.add("is-menu-open");
+
+  showGnb();
+}
+
+function closeMenu() {
+  if (!menuButton || !menuPanel) return;
+
+  isMenuOpen = false;
+
+  menuPanel.classList.remove("is-open");
+  menuButton.classList.remove("is-open");
+  menuButton.setAttribute("aria-label", "메뉴 열기");
+
+  document.body.classList.remove("is-menu-open");
+}
+
+function toggleMenu() {
+  if (isMenuOpen) {
+    closeMenu();
+  } else {
+    openMenu();
+  }
 }
 
 function showScrollGuide() {
@@ -149,6 +190,18 @@ function startScrollGuideWatch() {
     scrollGuideTimer = setTimeout(() => {
       showScrollGuide();
     }, 5000);
+  });
+}
+
+if (menuButton) {
+  menuButton.addEventListener("click", toggleMenu);
+}
+
+if (menuPanel) {
+  const menuLinks = menuPanel.querySelectorAll(".menu-link");
+
+  menuLinks.forEach((link) => {
+    link.addEventListener("click", closeMenu);
   });
 }
 
