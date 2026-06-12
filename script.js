@@ -147,6 +147,7 @@ function openMenu() {
   document.body.classList.add("is-menu-open");
 
   showGnb();
+  hideScrollGuide();
 }
 
 function closeMenu() {
@@ -171,6 +172,7 @@ function toggleMenu() {
 
 function showScrollGuide() {
   if (!scrollGuide) return;
+  if (isMenuOpen) return;
 
   scrollGuide.classList.add("is-visible");
 }
