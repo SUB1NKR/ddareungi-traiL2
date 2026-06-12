@@ -6,6 +6,7 @@ const slides = document.querySelectorAll(".safety-slide");
 
 const loadingFill = document.querySelector("#loadingFill");
 
+const gnb = document.querySelector("#gnb");
 const scrollGuide = document.querySelector("#scrollGuide");
 
 const slideInterval = 2000;
@@ -14,6 +15,8 @@ const totalLoadingTime = slides.length * slideInterval;
 let currentIndex = 0;
 let slideTimer = null;
 let scrollGuideTimer = null;
+let lastScrollY = 0;
+let isGnbReady = false;
 
 function easeInOutCubic(t) {
   if (t < 0.5) {
@@ -77,9 +80,50 @@ function finishLoading() {
     loadingPage.style.display = "none";
     document.body.style.overflow = "auto";
 
+    showGnb();
+    startGnbScrollWatch();
+
     showScrollGuide();
     startScrollGuideWatch();
   }, 800);
+}
+
+function showGnb() {
+  if (!gnb) return;
+
+  isGnbReady = true;
+  gnb.classList.remove("is-hidden");
+
+  requestAnimationFrame(() => {
+    gnb.classList.add("is-visible");
+  });
+}
+
+function hideGnb() {
+  if (!gnb || !isGnbReady) return;
+
+  gnb.classList.add("is-hidden");
+}
+
+function startGnbScrollWatch() {
+  lastScrollY = window.scrollY;
+
+  window.addEventListener("scroll", () => {
+    const currentScrollY = window.scrollY;
+    const scrollDifference = Math.abs(currentScrollY - lastScrollY);
+
+    if (scrollDifference < 8) return;
+
+    if (currentScrollY <= 10) {
+      showGnb();
+    } else if (currentScrollY > lastScrollY) {
+      hideGnb();
+    } else {
+      showGnb();
+    }
+
+    lastScrollY = currentScrollY;
+  });
 }
 
 function showScrollGuide() {
