@@ -11,9 +11,19 @@ const menuPanel = document.querySelector("#menuPanel");
 
 const scrollGuide = document.querySelector("#scrollGuide");
 
+const frameSection = document.querySelector("#frameSection");
+const frameCanvas = document.querySelector("#frameCanvas");
+const frameContext = frameCanvas?.getContext("2d");
+
 const slideInterval = 2000;
 const totalLoadingTime = slides.length * slideInterval;
 const menuDuration = 780;
+
+const frameCount = 362;
+const frameStartIndex = 0;
+const framePath = "./assets/frames/";
+const framePrefix = "BX사이트";
+const frameExtension = ".webp";
 
 let currentIndex = 0;
 let slideTimer = null;
@@ -28,8 +38,16 @@ let isMenuClosing = false;
 let lockedScrollY = 0;
 let isRestoringScroll = false;
 
+let frameImages = [];
+let currentFrameIndex = 0;
+let frameAnimationId = null;
+
 function easeInOutCubic(t) {
   return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+}
+
+function clamp(value, min, max) {
+  return Math.min(Math.max(value, min), max);
 }
 
 function shouldBlockScroll() {
@@ -82,6 +100,116 @@ function startScrollBlock() {
   window.addEventListener("touchmove", preventScroll, { passive: false });
   window.addEventListener("keydown", preventScrollKey);
   window.addEventListener("scroll", restoreLockedScroll);
+}
+
+function getFrameSrc(index) {
+  const frameNumber = String(frameStartIndex + index).padStart(3, "0");
+  return `${framePath}${framePrefix}${frameNumber}${frameExtension}`;
+}
+
+function preloadFrames() {
+  frameImages = Array.from({ length: frameCount }, (_, index) => {
+    const image = new Image();
+    image.src = getFrameSrc(index);
+    return image;
+  });
+
+  frameImages[0].addEventListener("load", () => {
+    resizeFrameCanvas();
+    drawFrame(0);
+  });
+}
+
+function resizeFrameCanvas() {
+  if (!frameCanvas || !frameContext) return;
+
+  const pixelRatio = window.devicePixelRatio || 1;
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+
+  frameCanvas.width = width * pixelRatio;
+  frameCanvas.height = height * pixelRatio;
+
+  frameCanvas.style.width = `${width}px`;
+  frameCanvas.style.height = `${height}px`;
+
+  frameContext.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+
+  drawFrame(currentFrameIndex);
+}
+
+function drawFrame(index) {
+  if (!frameContext || !frameCanvas) return;
+
+  const image = frameImages[index];
+
+  if (!image || !image.complete) return;
+
+  const canvasWidth = window.innerWidth;
+  const canvasHeight = window.innerHeight;
+
+  const imageRatio = image.naturalWidth / image.naturalHeight;
+  const canvasRatio = canvasWidth / canvasHeight;
+
+  let drawWidth;
+  let drawHeight;
+  let drawX;
+  let drawY;
+
+  if (imageRatio > canvasRatio) {
+    drawHeight = canvasHeight;
+    drawWidth = drawHeight * imageRatio;
+    drawX = (canvasWidth - drawWidth) / 2;
+    drawY = 0;
+  } else {
+    drawWidth = canvasWidth;
+    drawHeight = drawWidth / imageRatio;
+    drawX = 0;
+    drawY = (canvasHeight - drawHeight) / 2;
+  }
+
+  frameContext.clearRect(0, 0, canvasWidth, canvasHeight);
+  frameContext.drawImage(image, drawX, drawY, drawWidth, drawHeight);
+}
+
+function updateFrameByScroll() {
+  if (!frameSection || !isPageReady) return;
+
+  const sectionTop = frameSection.offsetTop;
+  const sectionHeight = frameSection.offsetHeight;
+  const viewportHeight = window.innerHeight;
+
+  const scrollRange = sectionHeight - viewportHeight;
+  const progress = clamp((window.scrollY - sectionTop) / scrollRange, 0, 1);
+  const nextFrameIndex = Math.round(progress * (frameCount - 1));
+
+  if (nextFrameIndex !== currentFrameIndex) {
+    currentFrameIndex = nextFrameIndex;
+    drawFrame(currentFrameIndex);
+  }
+}
+
+function requestFrameUpdate() {
+  if (frameAnimationId) return;
+
+  frameAnimationId = requestAnimationFrame(() => {
+    updateFrameByScroll();
+    frameAnimationId = null;
+  });
+}
+
+function startFrameSequence() {
+  if (!frameSection || !frameCanvas || !frameContext) return;
+
+  preloadFrames();
+  resizeFrameCanvas();
+  updateFrameByScroll();
+
+  window.addEventListener("scroll", requestFrameUpdate);
+  window.addEventListener("resize", () => {
+    resizeFrameCanvas();
+    requestFrameUpdate();
+  });
 }
 
 function startLoading() {
@@ -140,6 +268,8 @@ function finishLoading() {
     loadingPage.style.display = "none";
 
     isPageReady = true;
+
+    startFrameSequence();
 
     showGnb();
     startGnbScrollWatch();
