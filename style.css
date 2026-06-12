@@ -71,45 +71,35 @@ body {
   font-weight: 900;
   letter-spacing: -0.02em;
   color: var(--main-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.loading-dot {
+.loading-text span {
   display: inline-block;
-  opacity: 0.2;
-  transform: translateY(0);
-  animation: loadingDotMotion 0.9s ease-in-out infinite;
+  animation: loadingLetterWave 1.35s ease-in-out infinite;
+  animation-delay: calc(var(--i) * 0.06s);
 }
 
-.dot-1 {
-  animation-delay: 0s;
-}
-
-.dot-2 {
-  animation-delay: 0.15s;
-}
-
-.dot-3 {
-  animation-delay: 0.3s;
-}
-
-@keyframes loadingDotMotion {
+@keyframes loadingLetterWave {
   0% {
-    opacity: 0.2;
+    opacity: 0.45;
     transform: translateY(0);
   }
 
-  35% {
+  30% {
     opacity: 1;
-    transform: translateY(-3px);
+    transform: translateY(-5px);
   }
 
-  70% {
-    opacity: 0.35;
+  60% {
+    opacity: 0.75;
     transform: translateY(0);
   }
 
   100% {
-    opacity: 0.2;
+    opacity: 0.45;
     transform: translateY(0);
   }
 }
