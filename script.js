@@ -13,11 +13,13 @@ const scrollGuide = document.querySelector("#scrollGuide");
 
 const slideInterval = 2000;
 const totalLoadingTime = slides.length * slideInterval;
+const menuDuration = 780;
 
 let currentIndex = 0;
 let slideTimer = null;
 let scrollGuideTimer = null;
 let lastScrollY = 0;
+
 let isGnbReady = false;
 let isMenuOpen = false;
 let isMenuClosing = false;
@@ -130,10 +132,14 @@ function openMenu() {
   if (!menuButton || !menuPanel || isMenuClosing) return;
 
   isMenuOpen = true;
+  isMenuClosing = false;
 
   document.body.classList.add("is-menu-open");
+  document.body.classList.remove("is-menu-closing");
+
   menuPanel.classList.remove("is-closing");
   menuPanel.classList.add("is-open");
+
   menuButton.classList.add("is-open");
   menuButton.setAttribute("aria-label", "메뉴 닫기");
 
@@ -147,23 +153,25 @@ function closeMenu() {
   isMenuOpen = false;
   isMenuClosing = true;
 
+  document.body.classList.remove("is-menu-open");
   document.body.classList.add("is-menu-closing");
+
   menuPanel.classList.remove("is-open");
   menuPanel.classList.add("is-closing");
 
-  menuPanel.addEventListener("transitionend", finishCloseMenu, { once: true });
+  setTimeout(() => {
+    finishCloseMenu();
+  }, menuDuration);
 }
 
-function finishCloseMenu(event) {
-  if (event.propertyName !== "transform") return;
-
+function finishCloseMenu() {
   isMenuClosing = false;
 
   menuPanel.classList.remove("is-closing");
+
   menuButton.classList.remove("is-open");
   menuButton.setAttribute("aria-label", "메뉴 열기");
 
-  document.body.classList.remove("is-menu-open");
   document.body.classList.remove("is-menu-closing");
 
   showGnb();
