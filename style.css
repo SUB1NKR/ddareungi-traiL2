@@ -73,6 +73,47 @@ body {
   color: var(--main-color);
 }
 
+.loading-dot {
+  display: inline-block;
+  opacity: 0.2;
+  transform: translateY(0);
+  animation: loadingDotMotion 0.9s ease-in-out infinite;
+}
+
+.dot-1 {
+  animation-delay: 0s;
+}
+
+.dot-2 {
+  animation-delay: 0.15s;
+}
+
+.dot-3 {
+  animation-delay: 0.3s;
+}
+
+@keyframes loadingDotMotion {
+  0% {
+    opacity: 0.2;
+    transform: translateY(0);
+  }
+
+  35% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+
+  70% {
+    opacity: 0.35;
+    transform: translateY(0);
+  }
+
+  100% {
+    opacity: 0.2;
+    transform: translateY(0);
+  }
+}
+
 /* 하단 로딩바 */
 .loading-track {
   position: absolute;
