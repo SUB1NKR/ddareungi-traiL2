@@ -23,45 +23,38 @@ let lastScrollY = 0;
 let isGnbReady = false;
 let isMenuOpen = false;
 let isMenuClosing = false;
+let scrollPosition = 0;
 
 function easeInOutCubic(t) {
   return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 }
 
-function preventPageScroll(event) {
-  if (!isMenuOpen && !isMenuClosing) return;
+function lockScroll() {
+  scrollPosition = window.scrollY;
 
-  event.preventDefault();
+  document.documentElement.classList.add("is-menu-open");
+  document.body.classList.add("is-menu-open");
+
+  document.body.style.position = "fixed";
+  document.body.style.top = `-${scrollPosition}px`;
+  document.body.style.left = "0";
+  document.body.style.right = "0";
+  document.body.style.width = "100%";
 }
 
-function preventScrollKey(event) {
-  if (!isMenuOpen && !isMenuClosing) return;
+function unlockScroll() {
+  document.body.style.position = "";
+  document.body.style.top = "";
+  document.body.style.left = "";
+  document.body.style.right = "";
+  document.body.style.width = "";
 
-  const scrollKeys = [
-    "ArrowUp",
-    "ArrowDown",
-    "PageUp",
-    "PageDown",
-    "Home",
-    "End",
-    " "
-  ];
+  document.documentElement.classList.remove("is-menu-open");
+  document.documentElement.classList.remove("is-menu-closing");
+  document.body.classList.remove("is-menu-open");
+  document.body.classList.remove("is-menu-closing");
 
-  if (scrollKeys.includes(event.key)) {
-    event.preventDefault();
-  }
-}
-
-function startScrollLock() {
-  window.addEventListener("wheel", preventPageScroll, { passive: false });
-  window.addEventListener("touchmove", preventPageScroll, { passive: false });
-  window.addEventListener("keydown", preventScrollKey);
-}
-
-function stopScrollLock() {
-  window.removeEventListener("wheel", preventPageScroll);
-  window.removeEventListener("touchmove", preventPageScroll);
-  window.removeEventListener("keydown", preventScrollKey);
+  window.scrollTo(0, scrollPosition);
 }
 
 function startLoading() {
@@ -170,9 +163,9 @@ function openMenu() {
   isMenuOpen = true;
   isMenuClosing = false;
 
-  startScrollLock();
+  lockScroll();
 
-  document.body.classList.add("is-menu-open");
+  document.documentElement.classList.remove("is-menu-closing");
   document.body.classList.remove("is-menu-closing");
 
   menuPanel.classList.remove("is-closing");
@@ -190,6 +183,9 @@ function closeMenu(callback) {
 
   isMenuOpen = false;
   isMenuClosing = true;
+
+  document.documentElement.classList.remove("is-menu-open");
+  document.documentElement.classList.add("is-menu-closing");
 
   document.body.classList.remove("is-menu-open");
   document.body.classList.add("is-menu-closing");
@@ -210,9 +206,7 @@ function finishCloseMenu(callback) {
   menuButton.classList.remove("is-open");
   menuButton.setAttribute("aria-label", "메뉴 열기");
 
-  document.body.classList.remove("is-menu-closing");
-
-  stopScrollLock();
+  unlockScroll();
   showGnb();
 
   if (typeof callback === "function") {
