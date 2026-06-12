@@ -6,7 +6,7 @@ const slides = document.querySelectorAll(".safety-slide");
 
 const scrollGuide = document.querySelector("#scrollGuide");
 
-const slideInterval = 3000;
+const slideInterval = 2000;
 const totalLoadingTime = slides.length * slideInterval;
 
 let currentIndex = 0;
